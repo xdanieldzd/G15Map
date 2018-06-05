@@ -117,7 +117,8 @@ namespace G15Map
 				for (int j = 0; j < gameHandler.Maps[i].Length; j++)
 				{
 					var map = gameHandler.Maps[i][j];
-					var mapNode = new TreeNode($"Map {j + 1:D2}") { Tag = map };
+					var debug = gameHandler.DebugWarps.FirstOrDefault(x => x.Target.MapGroup == (byte)(i + 1) && x.Target.MapID == (byte)(j + 1));
+					var mapNode = new TreeNode(debug.Name ?? $"Map {j + 1:D2}") { Tag = map };
 
 					var warpsNode = new TreeNode("Warps");
 					for (int k = 0; k < map.SecondaryHeader.Warps.Length; k++)
