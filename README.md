@@ -1,7 +1,7 @@
-﻿G1.5Map
+G1.5Map
 =======
 
-Something that can somehow, sort of view maps from those amazing prototypes found in May 2018. Well, the Gold one anyway, the silver one's untested as of right now.
+Something that can somehow, sort of view maps from those amazing prototypes found in May 2018. Well, the Gold one anyway, ~~the silver one's untested as of right now~~ and I guess the Silver one, too.
 
 Acknowledgements
 ================
