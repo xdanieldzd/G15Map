@@ -70,6 +70,12 @@
     <Compile Include="Parsers\Tileset.cs" />
     <Compile Include="Parsers\Sign.cs" />
     <Compile Include="Parsers\Warp.cs" />
+    <Compile Include="TilesetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TilesetForm.Designer.cs">
+      <DependentUpon>TilesetForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TreeViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -87,6 +93,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Data\PixelFont\smallest_pixel-7.ttf" />
+    <EmbeddedResource Include="TilesetForm.resx">
+      <DependentUpon>TilesetForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

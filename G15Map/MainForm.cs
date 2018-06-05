@@ -23,6 +23,8 @@ namespace G15Map
 		Map selectedMap;
 		IInteractiveObject selectedObject;
 
+		int blocksWidth;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -32,7 +34,11 @@ namespace G15Map
 
 			gameHandler = null;
 			gameDrawing = null;
+
 			selectedMap = null;
+			selectedObject = null;
+
+			blocksWidth = 4;
 
 			PrivateFontCollection = new PrivateFontCollection();
 			AddFontFromResource(PrivateFontCollection, "G15Map.Data.PixelFont.smallest_pixel-7.ttf");
@@ -76,8 +82,8 @@ namespace G15Map
 				var mapBitmap = gameDrawing.GetMapBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked);
 				pbMap.ClientSize = new Size(mapBitmap.Width * zoom, mapBitmap.Height * zoom);
 
-				var blockBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap.Tileset, selectedMap.Location);
-				pbBlocks.ClientSize = new Size(blockBitmap.Width * zoom, blockBitmap.Height * zoom);
+				var blockBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap.Tileset, selectedMap.Location, blocksWidth);
+				pbBlocks.ClientSize = new Size(blockBitmap.Width * 2, blockBitmap.Height * 2);
 
 				pbMap.Invalidate();
 				pbBlocks.Invalidate();
@@ -198,12 +204,10 @@ namespace G15Map
 		{
 			if (selectedMap == null) return;
 
-			var zoom = (enableZoomToolStripMenuItem.Checked ? 2 : 1);
-
-			var blocksBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked);
+			var blocksBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked, blocksWidth);
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 			e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-			e.Graphics.DrawImage(blocksBitmap, 0, 0, blocksBitmap.Width * zoom, blocksBitmap.Height * zoom);
+			e.Graphics.DrawImage(blocksBitmap, 0, 0, blocksBitmap.Width * 2, blocksBitmap.Height * 2);
 		}
 
 		private void showInformationToolStripMenuItem_Click(object sender, EventArgs e)

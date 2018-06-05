@@ -47,7 +47,7 @@ namespace G15Map.Parsers
 		//  23:40DF: (animated tile 4F)
 		//  ...
 
-		public const int BlockDataSize = 0x1000;
+		public const int BlockDataSize = 0x800;
 		public const int TileDataSize = 0x600;
 		public const int CollisionDataSize = 0x400;    // TODO verify
 

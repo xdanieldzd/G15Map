@@ -70,7 +70,7 @@
             this.helpToolStripMenuItem});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
-			this.menuStrip.Size = new System.Drawing.Size(1070, 24);
+			this.menuStrip.Size = new System.Drawing.Size(1134, 24);
 			this.menuStrip.TabIndex = 6;
 			this.menuStrip.Text = "menuStrip1";
 			// 
@@ -194,9 +194,9 @@
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslStatus});
-			this.statusStrip.Location = new System.Drawing.Point(0, 545);
+			this.statusStrip.Location = new System.Drawing.Point(0, 609);
 			this.statusStrip.Name = "statusStrip";
-			this.statusStrip.Size = new System.Drawing.Size(1070, 22);
+			this.statusStrip.Size = new System.Drawing.Size(1134, 22);
 			this.statusStrip.TabIndex = 7;
 			this.statusStrip.Text = "statusStrip1";
 			// 
@@ -223,7 +223,7 @@
 			this.tvMaps.HideSelection = false;
 			this.tvMaps.Location = new System.Drawing.Point(12, 27);
 			this.tvMaps.Name = "tvMaps";
-			this.tvMaps.Size = new System.Drawing.Size(164, 515);
+			this.tvMaps.Size = new System.Drawing.Size(164, 579);
 			this.tvMaps.TabIndex = 1;
 			this.tvMaps.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvMaps_AfterSelect);
 			// 
@@ -239,7 +239,7 @@
 			this.spnlMap.DisableMouseWheel = true;
 			this.spnlMap.Location = new System.Drawing.Point(182, 28);
 			this.spnlMap.Name = "spnlMap";
-			this.spnlMap.Size = new System.Drawing.Size(787, 514);
+			this.spnlMap.Size = new System.Drawing.Size(659, 578);
 			this.spnlMap.TabIndex = 5;
 			this.spnlMap.TabStop = true;
 			// 
@@ -263,9 +263,9 @@
 			this.spnlBlocks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.spnlBlocks.Controls.Add(this.pbBlocks);
 			this.spnlBlocks.DisableMouseWheel = true;
-			this.spnlBlocks.Location = new System.Drawing.Point(975, 29);
+			this.spnlBlocks.Location = new System.Drawing.Point(847, 29);
 			this.spnlBlocks.Name = "spnlBlocks";
-			this.spnlBlocks.Size = new System.Drawing.Size(83, 513);
+			this.spnlBlocks.Size = new System.Drawing.Size(275, 577);
 			this.spnlBlocks.TabIndex = 2;
 			this.spnlBlocks.TabStop = true;
 			// 
@@ -284,7 +284,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1070, 567);
+			this.ClientSize = new System.Drawing.Size(1134, 631);
 			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.tvMaps);
 			this.Controls.Add(this.spnlMap);

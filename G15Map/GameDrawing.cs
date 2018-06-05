@@ -17,7 +17,7 @@ namespace G15Map
 		GameHandler gameHandler;
 
 		Dictionary<(byte, byte), Bitmap> tilesetTileBitmaps;
-		Dictionary<(byte, byte), Bitmap> tilesetBlockBitmaps;
+		Dictionary<(byte, byte, int), Bitmap> tilesetBlockBitmaps;
 		Dictionary<(Map, byte), Bitmap> mapBitmaps;
 
 		// TODO: try and make better?
@@ -55,7 +55,7 @@ namespace G15Map
 			this.gameHandler = gameHandler;
 
 			tilesetTileBitmaps = new Dictionary<(byte, byte), Bitmap>();
-			tilesetBlockBitmaps = new Dictionary<(byte, byte), Bitmap>();
+			tilesetBlockBitmaps = new Dictionary<(byte, byte, int), Bitmap>();
 			mapBitmaps = new Dictionary<(Map, byte), Bitmap>();
 
 			bgPaletteRegister = 0xD8;
@@ -167,27 +167,32 @@ namespace G15Map
 			return paletteIdx;
 		}
 
-		public Bitmap GetTilesetBlocksBitmap(Map map, bool isNighttime)
+		public Bitmap GetTilesetBlocksBitmap(Map map, bool isNighttime, int widthInBlocks)
 		{
-			return GetTilesetBlocksBitmap(map.Tileset, GetPaletteIndex(map, isNighttime));
+			return GetTilesetBlocksBitmap(map.Tileset, GetPaletteIndex(map, isNighttime), widthInBlocks);
 		}
 
-		public Bitmap GetTilesetBlocksBitmap(byte tilesetIdx, byte paletteIdx)
+		public Bitmap GetTilesetBlocksBitmap(byte tilesetIdx, byte paletteIdx, int widthInBlocks)
 		{
-			if (tilesetBlockBitmaps.ContainsKey((tilesetIdx, paletteIdx)))
+			if (tilesetBlockBitmaps.ContainsKey((tilesetIdx, paletteIdx, widthInBlocks)))
 			{
-				return tilesetBlockBitmaps[(tilesetIdx, paletteIdx)];
+				return tilesetBlockBitmaps[(tilesetIdx, paletteIdx, widthInBlocks)];
 			}
 			else
 			{
+				var imageWidth = (32 * widthInBlocks);
+				var imageHeight = (int)Math.Round(32.0f * ((Tileset.BlockDataSize / 16) / widthInBlocks), MidpointRounding.AwayFromZero);
+
 				Tileset tileset = gameHandler.Tilesets[tilesetIdx];
 
 				Bitmap tilesetBitmap = GetTilesetBitmap(tilesetIdx, paletteIdx);
-				Bitmap bitmap = new Bitmap(32, 8192);
+				Bitmap bitmap = new Bitmap(imageWidth, imageHeight);
 
 				using (var g = Graphics.FromImage(bitmap))
 				{
-					for (int b = 0; b < tileset.BlockData.Length; b += 16)
+					g.Clear(Color.DarkOrange);
+
+					for (int b = 0, bn = 0; b < tileset.BlockData.Length; b += 16, bn++)
 					{
 						for (int t = 0; t < 16; t++)
 						{
@@ -195,15 +200,15 @@ namespace G15Map
 							var tsy = (tile / 16) * 8;
 							var tsx = (tile % 16) * 8;
 
-							var bby = ((b / 16) * 32) + (((t / 4)) * 8);
-							var bbx = (t % 4) * 8;
+							var bby = (((bn / widthInBlocks) * 32) + ((t / 4) * 8));
+							var bbx = (((bn % widthInBlocks) * 32) + ((t % 4) * 8));
 
 							g.DrawImage(tilesetBitmap, new Rectangle(bbx, bby, 8, 8), new Rectangle(tsx, tsy, 8, 8), GraphicsUnit.Pixel);
 						}
 					}
 				}
 
-				return (tilesetBlockBitmaps[(tilesetIdx, paletteIdx)] = bitmap);
+				return (tilesetBlockBitmaps[(tilesetIdx, paletteIdx, widthInBlocks)] = bitmap);
 			}
 		}
 
@@ -218,7 +223,7 @@ namespace G15Map
 			{
 				if (map == null || !map.IsValid) return new Bitmap(32, 32);
 
-				Bitmap blocksBitmap = GetTilesetBlocksBitmap(map, isNighttime);
+				Bitmap blocksBitmap = GetTilesetBlocksBitmap(map, isNighttime, 1);
 				Bitmap bitmap = new Bitmap(map.PrimaryHeader.Width * 32, map.PrimaryHeader.Height * 32);
 
 				using (var g = Graphics.FromImage(bitmap))
