@@ -46,11 +46,10 @@ namespace G15Map
 			showObjectOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			useNighttimePalettesToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			enableZoomToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
-
-
-
-
-			//LoadROM(@"D:\Games\Game Boy & Advance\Pokemon GS Spaceworld 1997 Demos\Pokémon Gold - Spaceworld 1997 Demo (Debug) (Header Fixed).sgb");
+#if DEBUG
+			if (Environment.MachineName == "RIN-CORE")
+				LoadROM(@"D:\Games\Game Boy & Advance\Pokemon GS Spaceworld 1997 Demos\Pokémon Gold - Spaceworld 1997 Demo (Debug) (Header Fixed).sgb");
+#endif
 		}
 
 		private void LoadROM(string path)
