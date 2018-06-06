@@ -43,12 +43,18 @@ namespace G15Map
 			PrivateFontCollection = new PrivateFontCollection();
 			AddFontFromResource(PrivateFontCollection, "G15Map.Data.PixelFont.smallest_pixel-7.ttf");
 
+			spnlMap.Resize += (s, e) => { spnlMap.Refresh(); };
+			spnlBlocks.Resize += (s, e) => { spnlBlocks.Refresh(); };
+
 			showObjectOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			useNighttimePalettesToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
-			enableZoomToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
+			enableZoomToolStripMenuItem.CheckedChanged += (s, e) => { LoadMap(selectedMap); pbMap.Invalidate(); pbBlocks.Invalidate(); };
 #if DEBUG
 			if (Environment.MachineName == "RIN-CORE")
+			{
 				LoadROM(@"D:\Games\Game Boy & Advance\Pokemon GS Spaceworld 1997 Demos\Pokémon Gold - Spaceworld 1997 Demo (Debug) (Header Fixed).sgb");
+				tilesetViewerToolStripMenuItem_Click(tilesetViewerToolStripMenuItem, EventArgs.Empty);
+			}
 #endif
 		}
 
@@ -65,6 +71,8 @@ namespace G15Map
 
 			pbMap.Invalidate();
 			pbBlocks.Invalidate();
+
+			tilesetViewerToolStripMenuItem.Enabled = true;
 
 			Text = $"{Application.ProductName} - [{path}]";
 			tsslStatus.Text = "ROM loaded";
@@ -84,8 +92,11 @@ namespace G15Map
 				var blockBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap.Tileset, selectedMap.Location, blocksWidth);
 				pbBlocks.ClientSize = new Size(blockBitmap.Width * 2, blockBitmap.Height * 2);
 
-				pbMap.Invalidate();
-				pbBlocks.Invalidate();
+				spnlBlocks.VerticalScroll.SmallChange = 64;
+				spnlBlocks.VerticalScroll.LargeChange = 512;
+
+				spnlMap.Refresh();
+				spnlBlocks.Refresh();
 			}
 		}
 
@@ -168,7 +179,7 @@ namespace G15Map
 			if (e.Node.Tag is Map map && map != null)
 			{
 				selectedObject = null;
-				showInformationToolStripMenuItem.Enabled = false;
+				objectInformationToolStripMenuItem.Enabled = false;
 				saveMapImageToolStripMenuItem.Enabled = true;
 
 				LoadMap(map);
@@ -180,7 +191,7 @@ namespace G15Map
 					LoadMap(objMap);
 
 				selectedObject = objInteractive;
-				showInformationToolStripMenuItem.Enabled = true;
+				objectInformationToolStripMenuItem.Enabled = true;
 				saveMapImageToolStripMenuItem.Enabled = true;
 
 				tsslStatus.Text = $"Selected {objInteractive.GetType().Name} at (X:{objInteractive.X - ((objInteractive is NPC) ? 4 : 0)}, Y:{objInteractive.Y - ((objInteractive is NPC) ? 4 : 0)})";
@@ -191,7 +202,7 @@ namespace G15Map
 			else
 			{
 				selectedObject = null;
-				showInformationToolStripMenuItem.Enabled = false;
+				objectInformationToolStripMenuItem.Enabled = false;
 				saveMapImageToolStripMenuItem.Enabled = false;
 
 				pbMap.Invalidate();
@@ -209,7 +220,7 @@ namespace G15Map
 			e.Graphics.DrawImage(blocksBitmap, 0, 0, blocksBitmap.Width * 2, blocksBitmap.Height * 2);
 		}
 
-		private void showInformationToolStripMenuItem_Click(object sender, EventArgs e)
+		private void objectInformationToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (selectedObject is Warp warp)
 			{
@@ -294,6 +305,17 @@ namespace G15Map
 
 					saveBitmap.Save(sfdSaveMapImage.FileName);
 				}
+			}
+		}
+
+		private void tilesetViewerToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (var tilesetForm = new TilesetForm())
+			{
+				tilesetForm.Initialize(gameHandler, gameDrawing);
+				if (selectedMap != null)
+					tilesetForm.SetTilesetAndPalette(selectedMap.Tileset, gameDrawing.GetPaletteIndex(selectedMap, useNighttimePalettesToolStripMenuItem.Checked));
+				tilesetForm.ShowDialog();
 			}
 		}
 	}

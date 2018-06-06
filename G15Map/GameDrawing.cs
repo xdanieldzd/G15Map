@@ -20,29 +20,41 @@ namespace G15Map
 		Dictionary<(byte, byte, int), Bitmap> tilesetBlockBitmaps;
 		Dictionary<(Map, byte), Bitmap> mapBitmaps;
 
-		// TODO: try and make better?
-		static readonly Dictionary<byte, SolidBrush> collisionBrushesEarly = new Dictionary<byte, SolidBrush>()
+		static readonly Dictionary<byte, (SolidBrush Brush, string Name)> collisionTypesUsed = new Dictionary<byte, (SolidBrush Brush, string Name)>()
 		{
-			{ 0x00, new SolidBrush(Color.FromArgb(128, Color.Green)) },		// floor
-			{ 0x01, new SolidBrush(Color.FromArgb(128, Color.Red)) },		// solid
-			{ 0x11, new SolidBrush(Color.FromArgb(128, Color.Orange)) },	// ledge
-			{ 0x21, new SolidBrush(Color.FromArgb(128, Color.Blue)) },		// water
-			{ 0x2C, new SolidBrush(Color.FromArgb(128, Color.Blue)) },		// water
-			{ 0x82, new SolidBrush(Color.FromArgb(128, Color.DarkGreen)) },	// grass
-			{ 0x8C, new SolidBrush(Color.FromArgb(128, Color.DarkGreen)) },	// grass
-			{ 0x62, new SolidBrush(Color.FromArgb(128, Color.Purple)) },	// ladder
+			{ 0x00, (new SolidBrush(Color.FromArgb(128, Color.Green)), "Floor") },
+			{ 0x05, (new SolidBrush(Color.FromArgb(128, Color.LawnGreen)), "Tree") },
+			{ 0x07, (new SolidBrush(Color.FromArgb(128, Color.Red)), "Solid") },
+
+			{ 0x12, (new SolidBrush(Color.FromArgb(128, Color.LawnGreen)), "Cut") },
+			{ 0x18, (new SolidBrush(Color.FromArgb(128, Color.DarkGreen)), "Grass") },
+
+			{ 0x21, (new SolidBrush(Color.FromArgb(128, Color.Blue)), "Water") },
+			{ 0x22, (new SolidBrush(Color.FromArgb(128, Color.Blue)), "Water\nfall") },
+			{ 0x29, (new SolidBrush(Color.FromArgb(128, Color.Blue)), "Water2") },
+
+			{ 0x60, (new SolidBrush(Color.FromArgb(128, Color.IndianRed)), "Warp") },
+
+			{ 0x71, (new SolidBrush(Color.FromArgb(128, Color.IndianRed)), "Door") },
+			{ 0x73, (new SolidBrush(Color.FromArgb(128, Color.IndianRed)), "Door2") },
+
+			{ 0x95, (new SolidBrush(Color.FromArgb(128, Color.Orange)), "Sign") },
 		};
 
-		static readonly Dictionary<byte, SolidBrush> collisionBrushesProto = new Dictionary<byte, SolidBrush>()
+		static readonly Dictionary<byte, (SolidBrush Brush, string Name)> collisionTypesEarly = new Dictionary<byte, (SolidBrush Brush, string Name)>()
 		{
-			{ 0x00, new SolidBrush(Color.FromArgb(128, Color.Green)) },		// floor
-			{ 0x07, new SolidBrush(Color.FromArgb(128, Color.Red)) },		// solid
-			{ 0x21, new SolidBrush(Color.FromArgb(128, Color.Blue)) },		// water
-			{ 0x29, new SolidBrush(Color.FromArgb(128, Color.Blue)) },		// water
-			{ 0x18, new SolidBrush(Color.FromArgb(128, Color.DarkGreen)) },	// grass
+			{ 0x00, (new SolidBrush(Color.FromArgb(128, Color.Green)), "Floor") },
+			{ 0x01, (new SolidBrush(Color.FromArgb(128, Color.Red)), "Solid") },
+			{ 0x11, (new SolidBrush(Color.FromArgb(128, Color.Orange)), "Ledge") },
+			{ 0x21, (new SolidBrush(Color.FromArgb(128, Color.Blue)), "Water") },
+			{ 0x2C, (new SolidBrush(Color.FromArgb(128, Color.Blue)), "Water2") },
+			{ 0x82, (new SolidBrush(Color.FromArgb(128, Color.DarkGreen)), "Grass") },
+			{ 0x8C, (new SolidBrush(Color.FromArgb(128, Color.DarkGreen)), "Grass2") },
+			{ 0x62, (new SolidBrush(Color.FromArgb(128, Color.Purple)), "Ladder") },
 		};
 
-		static readonly SolidBrush genericBrush = new SolidBrush(Color.FromArgb(128, Color.Black));
+		static readonly SolidBrush genericBlackBrush = new SolidBrush(Color.FromArgb(128, Color.Black));
+		static readonly SolidBrush genericGrayBrush = new SolidBrush(Color.FromArgb(128, Color.DarkSlateGray));
 
 		static readonly SolidBrush warpBrush = new SolidBrush(Color.FromArgb(128, Color.Blue));
 		static readonly SolidBrush signBrush = new SolidBrush(Color.FromArgb(128, Color.DarkRed));
@@ -76,15 +88,16 @@ namespace G15Map
 		{
 			if (disposing)
 			{
-				foreach (var brush in collisionBrushesEarly.Where(x => x.Value != null))
-					brush.Value.Dispose();
-				collisionBrushesEarly.Clear();
+				foreach (var type in collisionTypesEarly.Where(x => x.Value.Brush != null))
+					type.Value.Brush.Dispose();
+				collisionTypesEarly.Clear();
 
-				foreach (var brush in collisionBrushesProto.Where(x => x.Value != null))
-					brush.Value.Dispose();
-				collisionBrushesProto.Clear();
+				foreach (var type in collisionTypesUsed.Where(x => x.Value.Brush != null))
+					type.Value.Brush.Dispose();
+				collisionTypesUsed.Clear();
 
-				genericBrush.Dispose();
+				genericBlackBrush.Dispose();
+				genericGrayBrush.Dispose();
 				warpBrush.Dispose();
 				signBrush.Dispose();
 				npcBrush.Dispose();
@@ -102,7 +115,7 @@ namespace G15Map
 				Tileset tileset = gameHandler.Tilesets[tilesetIdx];
 				Palette palette = gameHandler.Palettes[paletteIdx];
 
-				Bitmap bitmap = new Bitmap(128, 96);
+				Bitmap bitmap = new Bitmap(128, 48);
 				BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
 
 				byte[] pixelData = new byte[bitmapData.Height * bitmapData.Stride];
@@ -136,7 +149,7 @@ namespace G15Map
 			}
 		}
 
-		private byte GetPaletteIndex(Map map, bool isNighttime)
+		public byte GetPaletteIndex(Map map, bool isNighttime)
 		{
 			// code starts at ROM2:54E5
 
@@ -285,31 +298,50 @@ namespace G15Map
 			}
 		}
 
-		public void DrawCollisionOverlay(int tilesetIdx, bool useEarlyMapping, Graphics g)
+		public void DrawTilesetOverlay(Graphics g, int x, int y, int zoom)
 		{
-			Tileset tileset = gameHandler.Tilesets[tilesetIdx];
-
-			g.InterpolationMode = InterpolationMode.NearestNeighbor;
-			g.PixelOffsetMode = PixelOffsetMode.None;
 			g.SmoothingMode = SmoothingMode.None;
 			g.TextContrast = 0;
 
-			var brushDict = (useEarlyMapping ? collisionBrushesEarly : collisionBrushesProto);
-
-			using (var textBrush = new SolidBrush(Color.FromArgb(255, 255, 255, 255)))
+			int step = (8 * zoom);
 			using (var font = new Font(MainForm.PrivateFontCollection.Families[0], 7.0f))
 			{
-				for (int c = 0; c < tileset.CollisionData.Length; c += 4)
+				for (int i = 0; i < 96; i++)
 				{
-					for (int b = 0; b < 4; b++)
-					{
-						int x = (b % 2) * 16;
-						int y = (b / 2) * 16;
+					var rect = new Rectangle(x + ((i % 16) * step), y + ((i / 16) * step), step, step);
+					g.FillRectangle(genericGrayBrush, rect);
+					g.DrawString($"{i:X2}", font, Brushes.White, new Point(rect.X, rect.Y));
+				}
+			}
+		}
 
-						byte value = tileset.CollisionData[c + b];
-						var brush = (brushDict.ContainsKey(value) ? brushDict[value] : genericBrush);
-						g.FillRectangle(brush, new Rectangle(x, (c * 8) + y, 16, 16));
-						g.DrawString($"{value:X2}", font, textBrush, new Point(x, (c * 8) + y));
+		public void DrawCollisionOverlay(Graphics g, int x, int y, byte tilesetIdx, int widthInBlocks, int zoom, bool useEarlyMapping)
+		{
+			var typeDict = (useEarlyMapping ? collisionTypesEarly : collisionTypesUsed);
+
+			Tileset tileset = gameHandler.Tilesets[tilesetIdx];
+
+			g.SmoothingMode = SmoothingMode.None;
+			g.TextContrast = 0;
+
+			int step = (16 * zoom);
+			using (var font = new Font(MainForm.PrivateFontCollection.Families[0], 7.0f))
+			{
+				for (int b = 0, bn = 0; b < tileset.CollisionData.Length; b += 4, bn++)
+				{
+					for (int c = 0; c < 4; c++)
+					{
+						var data = tileset.CollisionData[b + c];
+
+						int cy = (((bn / widthInBlocks) * (step * 2)) + ((c / 2) * step));
+						int cx = (((bn % widthInBlocks) * (step * 2)) + ((c % 2) * step));
+
+						var colBrush = (typeDict.ContainsKey(data) ? typeDict[data].Brush : genericBlackBrush);
+
+						g.FillRectangle(colBrush, new Rectangle(x + cx, y + cy, step, step));
+						g.DrawString($"{data:X2}", font, Brushes.White, new Point(x + cx, y + cy));
+						if (typeDict.ContainsKey(data))
+							g.DrawString($"{typeDict[data].Name}", font, Brushes.White, new Point(x + cx, y + cy + 8));
 					}
 				}
 			}
