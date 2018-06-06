@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace G15Map.Parsers
+namespace G15Map.Parsers.Events
 {
-	public class NPC : IInteractiveObject
+	public class NPC : IEventObject
 	{
 		public byte Sprite { get; private set; }
 		public byte Y { get; private set; }

@@ -55,7 +55,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Parsers\DebugWarpTarget.cs" />
-    <Compile Include="Parsers\IInteractiveObject.cs" />
+    <Compile Include="Parsers\Events\IEventObject.cs" />
     <Compile Include="Parsers\Map.cs" />
     <Compile Include="Parsers\MapConnection.cs" />
     <Compile Include="Parsers\PrimaryMapHeader.cs" />
@@ -66,10 +66,10 @@
     <Compile Include="SelectablePanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Parsers\NPC.cs" />
+    <Compile Include="Parsers\Events\NPC.cs" />
     <Compile Include="Parsers\Tileset.cs" />
-    <Compile Include="Parsers\Sign.cs" />
-    <Compile Include="Parsers\Warp.cs" />
+    <Compile Include="Parsers\Events\Sign.cs" />
+    <Compile Include="Parsers\Events\Warp.cs" />
     <Compile Include="TilesetForm.cs">
       <SubType>Form</SubType>
     </Compile>

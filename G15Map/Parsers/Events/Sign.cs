@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace G15Map.Parsers
+namespace G15Map.Parsers.Events
 {
-	public class Sign : IInteractiveObject
+	public class Sign : IEventObject
 	{
 		public byte Y { get; private set; }
 		public byte X { get; private set; }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+using G15Map.Parsers.Events;
+
 namespace G15Map.Parsers
 {
 	public class SecondaryMapHeader

@@ -25,6 +25,9 @@ namespace G15Map
 		{
 			InitializeComponent();
 
+			foreach (var control in Controls)
+				(control as Control).Font = SystemFonts.MessageBoxFont;
+
 			tilesetZoom = blockZoom = 2;
 			tilesetX = tilesetY = 0;
 

@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 
 using G15Map.Parsers;
+using G15Map.Parsers.Events;
 
 namespace G15Map
 {
@@ -262,7 +263,7 @@ namespace G15Map
 			}
 		}
 
-		public void DrawObjectOverlay(Graphics g, Map map, IInteractiveObject interactive, int zoom)
+		public void DrawEventOverlay(Graphics g, Map map, IEventObject eventObject, int zoom)
 		{
 			g.SmoothingMode = SmoothingMode.None;
 			g.TextContrast = 0;
@@ -276,7 +277,7 @@ namespace G15Map
 					g.FillRectangle(warpBrush, rect);
 					if (zoom > 1)
 						g.DrawString($"{warp.TargetMapGroup:D2}:{warp.TargetMapID:D2}\n{warp.TargetWarpIndex:D2}", font, Brushes.White, new Point(rect.X, rect.Y));
-					if (warp == interactive)
+					if (warp == eventObject)
 						g.DrawRectangle(Pens.Red, rect);
 				}
 
@@ -286,7 +287,7 @@ namespace G15Map
 					g.FillRectangle(signBrush, rect);
 					if (zoom > 1)
 						g.DrawString($"{sign.TextID:D2}\n{sign.Unknown:D2}", font, Brushes.White, new Point(rect.X, rect.Y));
-					if (sign == interactive)
+					if (sign == eventObject)
 						g.DrawRectangle(Pens.Red, rect);
 				}
 
@@ -296,7 +297,7 @@ namespace G15Map
 					g.FillRectangle(npcBrush, rect);
 					if (zoom > 1)
 						g.DrawString($"{npc.Sprite:D2}\n(...)", font, Brushes.White, new Point(rect.X, rect.Y));
-					if (npc == interactive)
+					if (npc == eventObject)
 						g.DrawRectangle(Pens.Red, rect);
 				}
 			}

@@ -50,7 +50,7 @@
 			// 
 			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnClose.Location = new System.Drawing.Point(212, 487);
+			this.btnClose.Location = new System.Drawing.Point(212, 502);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(75, 23);
 			this.btnClose.TabIndex = 0;
@@ -60,7 +60,7 @@
 			// nudTilesetNo
 			// 
 			this.nudTilesetNo.Location = new System.Drawing.Point(68, 12);
-			this.nudTilesetNo.Margin = new System.Windows.Forms.Padding(3, 3, 12, 3);
+			this.nudTilesetNo.Margin = new System.Windows.Forms.Padding(3, 3, 12, 6);
 			this.nudTilesetNo.Name = "nudTilesetNo";
 			this.nudTilesetNo.Size = new System.Drawing.Size(70, 20);
 			this.nudTilesetNo.TabIndex = 1;
@@ -69,7 +69,7 @@
 			// 
 			this.lblTilesetNo.AutoSize = true;
 			this.lblTilesetNo.Location = new System.Drawing.Point(12, 14);
-			this.lblTilesetNo.Margin = new System.Windows.Forms.Padding(3, 0, 12, 0);
+			this.lblTilesetNo.Margin = new System.Windows.Forms.Padding(3, 0, 12, 3);
 			this.lblTilesetNo.Name = "lblTilesetNo";
 			this.lblTilesetNo.Size = new System.Drawing.Size(41, 13);
 			this.lblTilesetNo.TabIndex = 3;
@@ -78,7 +78,7 @@
 			// pbTiles
 			// 
 			this.pbTiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pbTiles.Location = new System.Drawing.Point(12, 84);
+			this.pbTiles.Location = new System.Drawing.Point(12, 93);
 			this.pbTiles.Name = "pbTiles";
 			this.pbTiles.Size = new System.Drawing.Size(275, 113);
 			this.pbTiles.TabIndex = 4;
@@ -89,7 +89,7 @@
 			// 
 			this.lblPaletteNo.AutoSize = true;
 			this.lblPaletteNo.Location = new System.Drawing.Point(152, 14);
-			this.lblPaletteNo.Margin = new System.Windows.Forms.Padding(3, 0, 12, 0);
+			this.lblPaletteNo.Margin = new System.Windows.Forms.Padding(3, 0, 12, 3);
 			this.lblPaletteNo.Name = "lblPaletteNo";
 			this.lblPaletteNo.Size = new System.Drawing.Size(43, 13);
 			this.lblPaletteNo.TabIndex = 6;
@@ -98,7 +98,7 @@
 			// nudPaletteNo
 			// 
 			this.nudPaletteNo.Location = new System.Drawing.Point(208, 12);
-			this.nudPaletteNo.Margin = new System.Windows.Forms.Padding(3, 3, 12, 3);
+			this.nudPaletteNo.Margin = new System.Windows.Forms.Padding(3, 3, 12, 6);
 			this.nudPaletteNo.Name = "nudPaletteNo";
 			this.nudPaletteNo.Size = new System.Drawing.Size(70, 20);
 			this.nudPaletteNo.TabIndex = 5;
@@ -108,9 +108,10 @@
 			this.chkShowOverlays.AutoSize = true;
 			this.chkShowOverlays.Checked = true;
 			this.chkShowOverlays.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowOverlays.Location = new System.Drawing.Point(15, 38);
+			this.chkShowOverlays.Location = new System.Drawing.Point(15, 41);
 			this.chkShowOverlays.Name = "chkShowOverlays";
-			this.chkShowOverlays.Size = new System.Drawing.Size(97, 17);
+			this.chkShowOverlays.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
+			this.chkShowOverlays.Size = new System.Drawing.Size(100, 20);
 			this.chkShowOverlays.TabIndex = 9;
 			this.chkShowOverlays.Text = "Show Overlays";
 			this.chkShowOverlays.UseVisualStyleBackColor = true;
@@ -118,9 +119,10 @@
 			// chkEarlyCollisionMapping
 			// 
 			this.chkEarlyCollisionMapping.AutoSize = true;
-			this.chkEarlyCollisionMapping.Location = new System.Drawing.Point(15, 61);
+			this.chkEarlyCollisionMapping.Location = new System.Drawing.Point(15, 67);
 			this.chkEarlyCollisionMapping.Name = "chkEarlyCollisionMapping";
-			this.chkEarlyCollisionMapping.Size = new System.Drawing.Size(130, 17);
+			this.chkEarlyCollisionMapping.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
+			this.chkEarlyCollisionMapping.Size = new System.Drawing.Size(133, 20);
 			this.chkEarlyCollisionMapping.TabIndex = 10;
 			this.chkEarlyCollisionMapping.Text = "Assume Early Collision";
 			this.chkEarlyCollisionMapping.UseVisualStyleBackColor = true;
@@ -128,9 +130,10 @@
 			// chkShowGrids
 			// 
 			this.chkShowGrids.AutoSize = true;
-			this.chkShowGrids.Location = new System.Drawing.Point(155, 38);
+			this.chkShowGrids.Location = new System.Drawing.Point(155, 41);
 			this.chkShowGrids.Name = "chkShowGrids";
-			this.chkShowGrids.Size = new System.Drawing.Size(80, 17);
+			this.chkShowGrids.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
+			this.chkShowGrids.Size = new System.Drawing.Size(83, 20);
 			this.chkShowGrids.TabIndex = 11;
 			this.chkShowGrids.Text = "Show Grids";
 			this.chkShowGrids.UseVisualStyleBackColor = true;
@@ -145,7 +148,7 @@
 			this.spnlBlocks.Controls.Add(this.pbBlocks);
 			this.spnlBlocks.DisableMouseWheel = false;
 			this.spnlBlocks.DisableSmoothScrolling = true;
-			this.spnlBlocks.Location = new System.Drawing.Point(12, 203);
+			this.spnlBlocks.Location = new System.Drawing.Point(12, 212);
 			this.spnlBlocks.Name = "spnlBlocks";
 			this.spnlBlocks.Size = new System.Drawing.Size(275, 275);
 			this.spnlBlocks.TabIndex = 8;
@@ -167,7 +170,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnClose;
-			this.ClientSize = new System.Drawing.Size(299, 522);
+			this.ClientSize = new System.Drawing.Size(299, 537);
 			this.Controls.Add(this.chkShowGrids);
 			this.Controls.Add(this.chkEarlyCollisionMapping);
 			this.Controls.Add(this.chkShowOverlays);
