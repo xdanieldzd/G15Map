@@ -25,6 +25,8 @@ namespace G15Map
 
 		int blocksWidth;
 
+		Pen gridPen;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -40,6 +42,8 @@ namespace G15Map
 
 			blocksWidth = 4;
 
+			gridPen = new Pen(Color.FromArgb(128, Color.Gray));
+
 			PrivateFontCollection = new PrivateFontCollection();
 			AddFontFromResource(PrivateFontCollection, "G15Map.Data.PixelFont.smallest_pixel-7.ttf");
 
@@ -47,6 +51,7 @@ namespace G15Map
 			spnlBlocks.Resize += (s, e) => { spnlBlocks.Refresh(); };
 
 			showObjectOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
+			showGridOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			useNighttimePalettesToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			enableZoomToolStripMenuItem.CheckedChanged += (s, e) => { LoadMap(selectedMap); pbMap.Invalidate(); pbBlocks.Invalidate(); };
 #if DEBUG
@@ -172,6 +177,14 @@ namespace G15Map
 
 			if (showObjectOverlayToolStripMenuItem.Checked)
 				gameDrawing.DrawObjectOverlay(e.Graphics, selectedMap, selectedObject, zoom);
+
+			if (showGridOverlayToolStripMenuItem.Checked)
+				gameDrawing.DrawGridOverlay(
+					e.Graphics,
+					new Point(0, 0),
+					new Size(mapBitmap.Width * zoom, mapBitmap.Height * zoom),
+					Tileset.BlockDimensions * zoom,
+					gridPen);
 		}
 
 		private void tvMaps_AfterSelect(object sender, TreeViewEventArgs e)
@@ -218,6 +231,14 @@ namespace G15Map
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 			e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 			e.Graphics.DrawImage(blocksBitmap, 0, 0, blocksBitmap.Width * 2, blocksBitmap.Height * 2);
+
+			if (showGridOverlayToolStripMenuItem.Checked)
+				gameDrawing.DrawGridOverlay(
+					e.Graphics,
+					new Point(0, 0),
+					new Size(blocksBitmap.Width * 2, blocksBitmap.Height * 2),
+					Tileset.BlockDimensions * 2,
+					gridPen);
 		}
 
 		private void objectInformationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -316,6 +337,15 @@ namespace G15Map
 				if (selectedMap != null)
 					tilesetForm.SetTilesetAndPalette(selectedMap.Tileset, gameDrawing.GetPaletteIndex(selectedMap, useNighttimePalettesToolStripMenuItem.Checked));
 				tilesetForm.ShowDialog();
+			}
+		}
+
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (gridPen != null)
+			{
+				gridPen.Dispose();
+				gridPen = null;
 			}
 		}
 	}

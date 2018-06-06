@@ -51,6 +51,10 @@ namespace G15Map.Parsers
 		public const int TileDataSize = 0x600;
 		public const int CollisionDataSize = 0x400;    // TODO verify
 
+		public const int TileDimensions = 8;
+		public const int CollisionDimensions = 16;
+		public const int BlockDimensions = 32;
+
 		public byte Bank { get; private set; }
 		public ushort BlockDataPointer { get; private set; }
 		public ushort TileDataPointer { get; private set; }

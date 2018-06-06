@@ -19,11 +19,16 @@ namespace G15Map
 		int tilesetZoom, blockZoom;
 		int tilesetX, tilesetY;
 
+		Pen gridPen;
+
 		public TilesetForm()
 		{
 			InitializeComponent();
 
 			tilesetZoom = blockZoom = 2;
+			tilesetX = tilesetY = 0;
+
+			gridPen = new Pen(Color.FromArgb(128, Color.Gray));
 
 			spnlBlocks.VerticalScroll.SmallChange = 64;
 			spnlBlocks.VerticalScroll.LargeChange = 256;
@@ -33,6 +38,7 @@ namespace G15Map
 
 			chkShowOverlays.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
 			chkEarlyCollisionMapping.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
+			chkShowGrids.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
 		}
 
 		public void Initialize(GameHandler gameHandler, GameDrawing gameDrawing)
@@ -74,6 +80,15 @@ namespace G15Map
 			spnlBlocks.Refresh();
 		}
 
+		private void TilesetForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (gridPen != null)
+			{
+				gridPen.Dispose();
+				gridPen = null;
+			}
+		}
+
 		private void pbTiles_Paint(object sender, PaintEventArgs e)
 		{
 			if (tilesetBitmap == null) return;
@@ -89,6 +104,14 @@ namespace G15Map
 
 			if (chkShowOverlays.Checked)
 				gameDrawing.DrawTilesetOverlay(e.Graphics, tilesetX, tilesetY, tilesetZoom);
+
+			if (chkShowGrids.Checked)
+				gameDrawing.DrawGridOverlay(
+					e.Graphics,
+					new Point(tilesetX, tilesetY),
+					new Size((tilesetBitmap.Width * tilesetZoom), (tilesetBitmap.Height * tilesetZoom)),
+					(Parsers.Tileset.TileDimensions * tilesetZoom),
+					gridPen);
 		}
 
 		private void pbBlocks_Paint(object sender, PaintEventArgs e)
@@ -101,6 +124,13 @@ namespace G15Map
 
 			if (chkShowOverlays.Checked)
 				gameDrawing.DrawCollisionOverlay(e.Graphics, 0, 0, (byte)nudTilesetNo.Value, (blockBitmap.Width / 32), blockZoom, chkEarlyCollisionMapping.Checked);
+
+			if (chkShowGrids.Checked)
+				gameDrawing.DrawGridOverlay(e.Graphics,
+					new Point(0, 0),
+					new Size((sender as PictureBox).DisplayRectangle.Width, (sender as PictureBox).DisplayRectangle.Height),
+					(Parsers.Tileset.BlockDimensions * blockZoom),
+					gridPen);
 		}
 
 		private void btnClose_Click(object sender, EventArgs e)

@@ -41,6 +41,7 @@
 			this.tilesetViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showObjectOverlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showGridOverlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.useNighttimePalettesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.enableZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,6 +156,7 @@
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showObjectOverlayToolStripMenuItem,
+            this.showGridOverlayToolStripMenuItem,
             this.useNighttimePalettesToolStripMenuItem,
             this.toolStripMenuItem1,
             this.enableZoomToolStripMenuItem});
@@ -169,7 +171,16 @@
 			this.showObjectOverlayToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showObjectOverlayToolStripMenuItem.Name = "showObjectOverlayToolStripMenuItem";
 			this.showObjectOverlayToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-			this.showObjectOverlayToolStripMenuItem.Text = "Show Object Overlay";
+			this.showObjectOverlayToolStripMenuItem.Text = "Show &Object Overlay";
+			// 
+			// showGridOverlayToolStripMenuItem
+			// 
+			this.showGridOverlayToolStripMenuItem.Checked = true;
+			this.showGridOverlayToolStripMenuItem.CheckOnClick = true;
+			this.showGridOverlayToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.showGridOverlayToolStripMenuItem.Name = "showGridOverlayToolStripMenuItem";
+			this.showGridOverlayToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.showGridOverlayToolStripMenuItem.Text = "Show &Grid Overlay";
 			// 
 			// useNighttimePalettesToolStripMenuItem
 			// 
@@ -211,7 +222,7 @@
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslStatus});
-			this.statusStrip.Location = new System.Drawing.Point(0, 627);
+			this.statusStrip.Location = new System.Drawing.Point(0, 625);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(1134, 22);
 			this.statusStrip.TabIndex = 7;
@@ -240,7 +251,7 @@
 			this.tvMaps.HideSelection = false;
 			this.tvMaps.Location = new System.Drawing.Point(12, 27);
 			this.tvMaps.Name = "tvMaps";
-			this.tvMaps.Size = new System.Drawing.Size(164, 597);
+			this.tvMaps.Size = new System.Drawing.Size(164, 595);
 			this.tvMaps.TabIndex = 1;
 			this.tvMaps.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvMaps_AfterSelect);
 			// 
@@ -257,9 +268,9 @@
 			this.spnlMap.Controls.Add(this.pbMap);
 			this.spnlMap.DisableMouseWheel = true;
 			this.spnlMap.DisableSmoothScrolling = false;
-			this.spnlMap.Location = new System.Drawing.Point(182, 28);
+			this.spnlMap.Location = new System.Drawing.Point(182, 27);
 			this.spnlMap.Name = "spnlMap";
-			this.spnlMap.Size = new System.Drawing.Size(659, 596);
+			this.spnlMap.Size = new System.Drawing.Size(659, 595);
 			this.spnlMap.TabIndex = 5;
 			this.spnlMap.TabStop = true;
 			// 
@@ -286,7 +297,7 @@
 			this.spnlBlocks.Controls.Add(this.pbBlocks);
 			this.spnlBlocks.DisableMouseWheel = true;
 			this.spnlBlocks.DisableSmoothScrolling = true;
-			this.spnlBlocks.Location = new System.Drawing.Point(847, 29);
+			this.spnlBlocks.Location = new System.Drawing.Point(847, 27);
 			this.spnlBlocks.Name = "spnlBlocks";
 			this.spnlBlocks.Size = new System.Drawing.Size(275, 595);
 			this.spnlBlocks.TabIndex = 2;
@@ -307,7 +318,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1134, 649);
+			this.ClientSize = new System.Drawing.Size(1134, 647);
 			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.tvMaps);
 			this.Controls.Add(this.spnlMap);
@@ -316,6 +327,7 @@
 			this.MainMenuStrip = this.menuStrip;
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
 			this.statusStrip.ResumeLayout(false);
@@ -358,6 +370,7 @@
 		private System.Windows.Forms.SaveFileDialog sfdSaveMapImage;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem tilesetViewerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem showGridOverlayToolStripMenuItem;
 	}
 }
 

@@ -193,8 +193,8 @@ namespace G15Map
 			}
 			else
 			{
-				var imageWidth = (32 * widthInBlocks);
-				var imageHeight = (int)Math.Round(32.0f * ((Tileset.BlockDataSize / 16) / widthInBlocks), MidpointRounding.AwayFromZero);
+				var imageWidth = (Tileset.BlockDimensions * widthInBlocks);
+				var imageHeight = (int)Math.Round((float)Tileset.BlockDimensions * ((Tileset.BlockDataSize / 16) / widthInBlocks), MidpointRounding.AwayFromZero);
 
 				Tileset tileset = gameHandler.Tilesets[tilesetIdx];
 
@@ -210,13 +210,17 @@ namespace G15Map
 						for (int t = 0; t < 16; t++)
 						{
 							var tile = tileset.BlockData[b + t];
-							var tsy = (tile / 16) * 8;
-							var tsx = (tile % 16) * 8;
+							var tsy = (tile / 16) * Tileset.TileDimensions;
+							var tsx = (tile % 16) * Tileset.TileDimensions;
 
-							var bby = (((bn / widthInBlocks) * 32) + ((t / 4) * 8));
-							var bbx = (((bn % widthInBlocks) * 32) + ((t % 4) * 8));
+							var bby = (((bn / widthInBlocks) * Tileset.BlockDimensions) + ((t / 4) * Tileset.TileDimensions));
+							var bbx = (((bn % widthInBlocks) * Tileset.BlockDimensions) + ((t % 4) * Tileset.TileDimensions));
 
-							g.DrawImage(tilesetBitmap, new Rectangle(bbx, bby, 8, 8), new Rectangle(tsx, tsy, 8, 8), GraphicsUnit.Pixel);
+							g.DrawImage(
+								tilesetBitmap,
+								new Rectangle(bbx, bby, Tileset.TileDimensions, Tileset.TileDimensions),
+								new Rectangle(tsx, tsy, Tileset.TileDimensions, Tileset.TileDimensions),
+								GraphicsUnit.Pixel);
 						}
 					}
 				}
@@ -234,10 +238,10 @@ namespace G15Map
 			}
 			else
 			{
-				if (map == null || !map.IsValid) return new Bitmap(32, 32);
+				if (map == null || !map.IsValid) return new Bitmap(Tileset.BlockDimensions, Tileset.BlockDimensions);
 
 				Bitmap blocksBitmap = GetTilesetBlocksBitmap(map, isNighttime, 1);
-				Bitmap bitmap = new Bitmap(map.PrimaryHeader.Width * 32, map.PrimaryHeader.Height * 32);
+				Bitmap bitmap = new Bitmap(map.PrimaryHeader.Width * Tileset.BlockDimensions, map.PrimaryHeader.Height * Tileset.BlockDimensions);
 
 				using (var g = Graphics.FromImage(bitmap))
 				{
@@ -247,8 +251,8 @@ namespace G15Map
 						{
 							var value = map.MapData[(y * map.PrimaryHeader.Width) + x];
 							g.DrawImage(blocksBitmap,
-								new Rectangle(x * 32, y * 32, 32, 32),
-								new Rectangle(0, value * 32, 32, 32),
+								new Rectangle(x * Tileset.BlockDimensions, y * Tileset.BlockDimensions, Tileset.BlockDimensions, Tileset.BlockDimensions),
+								new Rectangle(0, value * Tileset.BlockDimensions, Tileset.BlockDimensions, Tileset.BlockDimensions),
 								GraphicsUnit.Pixel);
 						}
 					}
@@ -303,7 +307,7 @@ namespace G15Map
 			g.SmoothingMode = SmoothingMode.None;
 			g.TextContrast = 0;
 
-			int step = (8 * zoom);
+			int step = (Tileset.TileDimensions * zoom);
 			using (var font = new Font(MainForm.PrivateFontCollection.Families[0], 7.0f))
 			{
 				for (int i = 0; i < 96; i++)
@@ -324,7 +328,7 @@ namespace G15Map
 			g.SmoothingMode = SmoothingMode.None;
 			g.TextContrast = 0;
 
-			int step = (16 * zoom);
+			int step = (Tileset.CollisionDimensions * zoom);
 			using (var font = new Font(MainForm.PrivateFontCollection.Families[0], 7.0f))
 			{
 				for (int b = 0, bn = 0; b < tileset.CollisionData.Length; b += 4, bn++)
@@ -345,6 +349,14 @@ namespace G15Map
 					}
 				}
 			}
+		}
+
+		public void DrawGridOverlay(Graphics g, Point location, Size size, int gridSize, Pen pen)
+		{
+			g.PixelOffsetMode = PixelOffsetMode.None;
+			for (int gy = 0; gy < size.Height; gy += gridSize)
+				for (int gx = 0; gx < size.Width; gx += gridSize)
+					g.DrawRectangle(pen, new Rectangle(location.X + gx, location.Y + gy, gridSize - 1, gridSize - 1));
 		}
 	}
 }
