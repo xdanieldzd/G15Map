@@ -39,6 +39,8 @@ namespace G15Map
 			chkShowOverlays.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
 			chkEarlyCollisionMapping.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
 			chkShowGrids.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
+
+			pbBlocks.MouseDown += (s, e) => { pbBlocks.Parent?.Focus(); };
 		}
 
 		public void Initialize(GameHandler gameHandler, GameDrawing gameDrawing)

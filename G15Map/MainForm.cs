@@ -50,6 +50,8 @@ namespace G15Map
 			spnlMap.Resize += (s, e) => { spnlMap.Refresh(); };
 			spnlBlocks.Resize += (s, e) => { spnlBlocks.Refresh(); };
 
+			pbBlocks.MouseDown += (s, e) => { pbBlocks.Parent?.Focus(); };
+
 			showObjectOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			showGridOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			useNighttimePalettesToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
@@ -58,7 +60,8 @@ namespace G15Map
 			if (Environment.MachineName == "RIN-CORE")
 			{
 				LoadROM(@"D:\Games\Game Boy & Advance\Pokemon GS Spaceworld 1997 Demos\Pokémon Gold - Spaceworld 1997 Demo (Debug) (Header Fixed).sgb");
-				tilesetViewerToolStripMenuItem_Click(tilesetViewerToolStripMenuItem, EventArgs.Empty);
+				//tilesetViewerToolStripMenuItem_Click(tilesetViewerToolStripMenuItem, EventArgs.Empty);
+				//tvMaps.SelectedNode = tvMaps.Nodes[0].Nodes[3];
 			}
 #endif
 		}
@@ -243,7 +246,12 @@ namespace G15Map
 
 		private void objectInformationToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (selectedObject is Warp warp)
+			ShowObjectInformation(selectedObject);
+		}
+
+		private void ShowObjectInformation(IInteractiveObject interactiveObject)
+		{
+			if (interactiveObject is Warp warp)
 			{
 				MessageBox.Show(
 					$"Warp #{Array.IndexOf(selectedMap.SecondaryHeader.Warps, warp)}:\n\n" +
@@ -253,7 +261,7 @@ namespace G15Map
 					$"(Unknown; maybe pointer: 0x{warp.UnknownMaybePointer:X4})\n",
 					"Warp Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
-			else if (selectedObject is Sign sign)
+			else if (interactiveObject is Sign sign)
 			{
 				MessageBox.Show(
 					$"Sign #{Array.IndexOf(selectedMap.SecondaryHeader.Signs, sign)}:\n\n" +
@@ -261,7 +269,7 @@ namespace G15Map
 					$"(Unknown: 0x{sign.Unknown:X4})\n",
 					"Sign Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
-			else if (selectedObject is NPC npc)
+			else if (interactiveObject is NPC npc)
 			{
 				MessageBox.Show(
 					$"NPC #{Array.IndexOf(selectedMap.SecondaryHeader.NPCs, npc)}:\n\n" +
@@ -347,6 +355,28 @@ namespace G15Map
 				gridPen.Dispose();
 				gridPen = null;
 			}
+		}
+
+		private void pbMap_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left) return;
+
+			var zoom = (enableZoomToolStripMenuItem.Checked ? 2 : 1);
+			var objectClickX = e.X / 16 / zoom;
+			var objectClickY = e.Y / 16 / zoom;
+
+			var selectedWarp = selectedMap.SecondaryHeader.Warps.FirstOrDefault(x => x.X == objectClickX && x.Y == objectClickY);
+			var selectedSign = selectedMap.SecondaryHeader.Signs.FirstOrDefault(x => x.X == objectClickX && x.Y == objectClickY);
+			var selectedNpc = selectedMap.SecondaryHeader.NPCs.FirstOrDefault(x => x.X == (objectClickX + 4) && x.Y == (objectClickY + 4));
+
+			if (selectedWarp != null) selectedObject = selectedWarp;
+			else if (selectedSign != null) selectedObject = selectedSign;
+			else if (selectedNpc != null) selectedObject = selectedNpc;
+			else selectedObject = null;
+
+			(sender as PictureBox).Invalidate();
+
+			ShowObjectInformation(selectedObject);
 		}
 	}
 }

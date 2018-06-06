@@ -36,9 +36,9 @@
 			this.nudPaletteNo = new System.Windows.Forms.NumericUpDown();
 			this.chkShowOverlays = new System.Windows.Forms.CheckBox();
 			this.chkEarlyCollisionMapping = new System.Windows.Forms.CheckBox();
+			this.chkShowGrids = new System.Windows.Forms.CheckBox();
 			this.spnlBlocks = new G15Map.SelectablePanel();
 			this.pbBlocks = new System.Windows.Forms.PictureBox();
-			this.chkShowGrids = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.nudTilesetNo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbTiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudPaletteNo)).BeginInit();
@@ -125,6 +125,16 @@
 			this.chkEarlyCollisionMapping.Text = "Assume Early Collision";
 			this.chkEarlyCollisionMapping.UseVisualStyleBackColor = true;
 			// 
+			// chkShowGrids
+			// 
+			this.chkShowGrids.AutoSize = true;
+			this.chkShowGrids.Location = new System.Drawing.Point(155, 38);
+			this.chkShowGrids.Name = "chkShowGrids";
+			this.chkShowGrids.Size = new System.Drawing.Size(80, 17);
+			this.chkShowGrids.TabIndex = 11;
+			this.chkShowGrids.Text = "Show Grids";
+			this.chkShowGrids.UseVisualStyleBackColor = true;
+			// 
 			// spnlBlocks
 			// 
 			this.spnlBlocks.AlwaysShowHorizontalScroll = true;
@@ -133,7 +143,7 @@
 			this.spnlBlocks.BackgroundImage = global::G15Map.Properties.Resources.BgEmpty;
 			this.spnlBlocks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.spnlBlocks.Controls.Add(this.pbBlocks);
-			this.spnlBlocks.DisableMouseWheel = true;
+			this.spnlBlocks.DisableMouseWheel = false;
 			this.spnlBlocks.DisableSmoothScrolling = true;
 			this.spnlBlocks.Location = new System.Drawing.Point(12, 203);
 			this.spnlBlocks.Name = "spnlBlocks";
@@ -152,16 +162,6 @@
 			this.pbBlocks.TabStop = false;
 			this.pbBlocks.Paint += new System.Windows.Forms.PaintEventHandler(this.pbBlocks_Paint);
 			// 
-			// chkShowGrids
-			// 
-			this.chkShowGrids.AutoSize = true;
-			this.chkShowGrids.Location = new System.Drawing.Point(155, 38);
-			this.chkShowGrids.Name = "chkShowGrids";
-			this.chkShowGrids.Size = new System.Drawing.Size(80, 17);
-			this.chkShowGrids.TabIndex = 11;
-			this.chkShowGrids.Text = "Show Grids";
-			this.chkShowGrids.UseVisualStyleBackColor = true;
-			// 
 			// TilesetForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,6 +178,7 @@
 			this.Controls.Add(this.lblTilesetNo);
 			this.Controls.Add(this.nudTilesetNo);
 			this.Controls.Add(this.btnClose);
+			this.DoubleBuffered = true;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
