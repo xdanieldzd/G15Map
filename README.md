@@ -1,7 +1,7 @@
 G1.5Map
 =======
 
-Something that can somehow, sort of view maps from those amazing prototypes found in May 2018. Well, the Gold one anyway, ~~the silver one's untested as of right now~~ and I guess the Silver one, too.
+A rudimentary viewer for the Pokemon Gold/Silver Spaceworld 1997 prototypes (debug builds) found in May 2018. Expect bugs, just like in the games themselves.
 
 Acknowledgements
 ================
