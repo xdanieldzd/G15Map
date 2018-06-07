@@ -96,14 +96,14 @@ namespace G15Map
 
 		private void btnSaveTileset_Click(object sender, EventArgs e)
 		{
-			sfdSaveImage.FileName = $"Tileset {(int)nudTilesetNo.Value + 1:D2} (Tiles).png";
+			sfdSaveImage.FileName = $"Tileset {(int)nudTilesetNo.Value:D2} (Palette {(int)nudPaletteNo.Value:D2} - Tiles).png";
 			if (sfdSaveImage.ShowDialog() == DialogResult.OK)
 				tilesetBitmap.Save(sfdSaveImage.FileName);
 		}
 
 		private void btnSaveBlocks_Click(object sender, EventArgs e)
 		{
-			sfdSaveImage.FileName = $"Tileset {(int)nudTilesetNo.Value + 1:D2} (Blocks).png";
+			sfdSaveImage.FileName = $"Tileset {(int)nudTilesetNo.Value:D2} (Palette {(int)nudPaletteNo.Value:D2} - Blocks).png";
 			if (sfdSaveImage.ShowDialog() == DialogResult.OK)
 				blockBitmap.Save(sfdSaveImage.FileName);
 		}
