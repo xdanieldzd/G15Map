@@ -39,6 +39,9 @@
 			this.chkShowGrids = new System.Windows.Forms.CheckBox();
 			this.spnlBlocks = new G15Map.SelectablePanel();
 			this.pbBlocks = new System.Windows.Forms.PictureBox();
+			this.btnSaveTileset = new System.Windows.Forms.Button();
+			this.btnSaveBlocks = new System.Windows.Forms.Button();
+			this.sfdSaveImage = new System.Windows.Forms.SaveFileDialog();
 			((System.ComponentModel.ISupportInitialize)(this.nudTilesetNo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbTiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudPaletteNo)).BeginInit();
@@ -50,7 +53,7 @@
 			// 
 			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnClose.Location = new System.Drawing.Point(212, 502);
+			this.btnClose.Location = new System.Drawing.Point(212, 552);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(75, 23);
 			this.btnClose.TabIndex = 0;
@@ -148,7 +151,7 @@
 			this.spnlBlocks.Controls.Add(this.pbBlocks);
 			this.spnlBlocks.DisableMouseWheel = false;
 			this.spnlBlocks.DisableSmoothScrolling = true;
-			this.spnlBlocks.Location = new System.Drawing.Point(12, 212);
+			this.spnlBlocks.Location = new System.Drawing.Point(12, 241);
 			this.spnlBlocks.Name = "spnlBlocks";
 			this.spnlBlocks.Size = new System.Drawing.Size(275, 275);
 			this.spnlBlocks.TabIndex = 8;
@@ -165,12 +168,38 @@
 			this.pbBlocks.TabStop = false;
 			this.pbBlocks.Paint += new System.Windows.Forms.PaintEventHandler(this.pbBlocks_Paint);
 			// 
+			// btnSaveTileset
+			// 
+			this.btnSaveTileset.Location = new System.Drawing.Point(12, 212);
+			this.btnSaveTileset.Name = "btnSaveTileset";
+			this.btnSaveTileset.Size = new System.Drawing.Size(275, 23);
+			this.btnSaveTileset.TabIndex = 12;
+			this.btnSaveTileset.Text = "Save Tileset Image...";
+			this.btnSaveTileset.UseVisualStyleBackColor = true;
+			this.btnSaveTileset.Click += new System.EventHandler(this.btnSaveTileset_Click);
+			// 
+			// btnSaveBlocks
+			// 
+			this.btnSaveBlocks.Location = new System.Drawing.Point(12, 522);
+			this.btnSaveBlocks.Name = "btnSaveBlocks";
+			this.btnSaveBlocks.Size = new System.Drawing.Size(275, 23);
+			this.btnSaveBlocks.TabIndex = 13;
+			this.btnSaveBlocks.Text = "Save Block Image...";
+			this.btnSaveBlocks.UseVisualStyleBackColor = true;
+			this.btnSaveBlocks.Click += new System.EventHandler(this.btnSaveBlocks_Click);
+			// 
+			// sfdSaveImage
+			// 
+			this.sfdSaveImage.Filter = "Image Files (*.png; *.bmp)|*.png;*.bmp";
+			// 
 			// TilesetForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnClose;
-			this.ClientSize = new System.Drawing.Size(299, 537);
+			this.ClientSize = new System.Drawing.Size(299, 587);
+			this.Controls.Add(this.btnSaveBlocks);
+			this.Controls.Add(this.btnSaveTileset);
 			this.Controls.Add(this.chkShowGrids);
 			this.Controls.Add(this.chkEarlyCollisionMapping);
 			this.Controls.Add(this.chkShowOverlays);
@@ -212,5 +241,8 @@
 		private SelectablePanel spnlBlocks;
 		private System.Windows.Forms.CheckBox chkEarlyCollisionMapping;
 		private System.Windows.Forms.CheckBox chkShowGrids;
+		private System.Windows.Forms.Button btnSaveTileset;
+		private System.Windows.Forms.Button btnSaveBlocks;
+		private System.Windows.Forms.SaveFileDialog sfdSaveImage;
 	}
 }
