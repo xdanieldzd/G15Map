@@ -11,3 +11,8 @@ Acknowledgements
   * The [Elfs2World map viewer by 2Tie](https://github.com/2Tie/Elfs2World/)
 * The overlay features use the Smallest Pixel-7 font v1.0 by [Sizenko Alexander/Style-7](http://www.styleseven.com/)
   * See also G15Map/Data/PixelFont/readme.txt
+
+Screenshots
+===========
+
+![Screenshot](https://raw.githubusercontent.com/xdanieldzd/G15Map/master/Screenshots/Shot1.png)<br><br>
