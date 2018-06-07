@@ -1,7 +1,7 @@
 G1.5Map
 =======
 
-A rudimentary viewer for the Pokemon Gold/Silver Spaceworld 1997 prototypes (debug builds) found in May 2018. Expect bugs, just like in the games themselves.
+A rudimentary viewer for the Pokemon Gold/Silver Spaceworld 1997 demos/prototypes (specifically, the debug builds) found in May 2018. Expect bugs, just like in the games themselves.
 
 Acknowledgements
 ================
