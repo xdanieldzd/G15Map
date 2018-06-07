@@ -152,6 +152,17 @@ namespace G15Map
 			return foundNode;
 		}
 
+		private void EnsureEventVisible(IEventObject eventObject)
+		{
+			var zoom = (enableZoomToolStripMenuItem.Checked ? 2 : 1);
+
+			var viewWidthEvents = (spnlMap.ClientSize.Width / (16 * zoom));
+			var viewHeightEvents = (spnlMap.ClientSize.Height / (16 * zoom));
+
+			spnlMap.HorizontalScroll.Value = Math.Min(spnlMap.HorizontalScroll.Maximum, (spnlMap.ClientSize.Width * (eventObject.X / viewWidthEvents)));
+			spnlMap.VerticalScroll.Value = Math.Min(spnlMap.VerticalScroll.Maximum, (spnlMap.ClientSize.Height * (eventObject.Y / viewHeightEvents)));
+		}
+
 		private void CreateMapTree()
 		{
 			tvMaps.BeginUpdate();
@@ -381,21 +392,37 @@ namespace G15Map
 			var objectClickX = e.X / 16 / zoom;
 			var objectClickY = e.Y / 16 / zoom;
 
-			IEventObject[] newlySelected =
+			IEventObject[] possibleEvents =
 			{
 				selectedMap.SecondaryHeader.Warps.FirstOrDefault(x => x.X == objectClickX && x.Y == objectClickY),
 				selectedMap.SecondaryHeader.Signs.FirstOrDefault(x => x.X == objectClickX && x.Y == objectClickY),
 				selectedMap.SecondaryHeader.NPCs.FirstOrDefault(x => x.X == (objectClickX + 4) && x.Y == (objectClickY + 4))
 			};
 
-			SelectEvent(newlySelected.Count(x => x != null) > 1 ? newlySelected.FirstOrDefault(x => (x != null && x != selectedEvent)) : newlySelected.FirstOrDefault(x => x != null));
+			var newlySelectedEvent = (possibleEvents.Count(x => x != null) > 1 ? possibleEvents.FirstOrDefault(x => (x != null && x != selectedEvent)) : possibleEvents.FirstOrDefault(x => x != null));
 
 			if (e.Button == MouseButtons.Left)
-				ShowEventInformation(selectedEvent);
-			else if ((e.Button == MouseButtons.Right) && (selectedEvent is Warp warp))
 			{
-				LoadMap(gameHandler.Maps[warp.TargetMapGroup - 1][warp.TargetMapID - 1]);
-				SelectEvent(selectedMap.SecondaryHeader.Warps[warp.TargetWarpIndex - 1]);
+				SelectEvent(newlySelectedEvent);
+				ShowEventInformation(selectedEvent);
+			}
+			else if ((e.Button == MouseButtons.Right) && (newlySelectedEvent is Warp warp))
+			{
+				var targetGroup = (warp.TargetMapGroup - 1);
+				var targetNumber = (warp.TargetMapID - 1);
+
+				if ((targetGroup < gameHandler.Maps.Length) && (targetNumber < gameHandler.Maps[targetGroup].Length))
+				{
+					LoadMap(gameHandler.Maps[targetGroup][targetNumber]);
+
+					var targetWarpIdx = (warp.TargetWarpIndex - 1);
+					if (targetWarpIdx < selectedMap.SecondaryHeader.Warps.Length)
+					{
+						EnsureEventVisible(selectedMap.SecondaryHeader.Warps[targetWarpIdx]);
+						SelectEvent(selectedMap.SecondaryHeader.Warps[targetWarpIdx]);
+						spnlMap.Refresh();
+					}
+				}
 			}
 		}
 	}
