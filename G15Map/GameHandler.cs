@@ -241,8 +241,8 @@ namespace G15Map
 			Maps = new Map[NumMapGroups][];
 			for (int i = 0; i < mapGroupPointers.Length; i++)
 			{
-				var currentStart = Helpers.CalculateOffset((byte)(MapGroupsListOffset >> 14), mapGroupPointers[i]);
-				var nextStart = ((i + 1) < mapGroupPointers.Length ? Helpers.CalculateOffset((byte)(MapGroupsListOffset >> 14), mapGroupPointers[i + 1]) : uint.MaxValue);
+				var currentStart = GameHelpers.CalculateOffset((byte)(MapGroupsListOffset >> 14), mapGroupPointers[i]);
+				var nextStart = ((i + 1) < mapGroupPointers.Length ? GameHelpers.CalculateOffset((byte)(MapGroupsListOffset >> 14), mapGroupPointers[i + 1]) : uint.MaxValue);
 
 				reader.BaseStream.Position = currentStart;
 

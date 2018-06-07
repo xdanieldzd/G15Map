@@ -17,10 +17,6 @@ namespace G15Map
 	{
 		GameHandler gameHandler;
 
-		Dictionary<(byte, byte), Bitmap> tilesetTileBitmaps;
-		Dictionary<(byte, byte, int), Bitmap> tilesetBlockBitmaps;
-		Dictionary<(Map, byte), Bitmap> mapBitmaps;
-
 		static readonly Dictionary<byte, (SolidBrush Brush, string Name)> collisionTypesUsed = new Dictionary<byte, (SolidBrush Brush, string Name)>()
 		{
 			{ 0x00, (new SolidBrush(Color.FromArgb(128, Color.Green)), "Floor") },
@@ -61,13 +57,17 @@ namespace G15Map
 		static readonly SolidBrush signBrush = new SolidBrush(Color.FromArgb(128, Color.DarkRed));
 		static readonly SolidBrush npcBrush = new SolidBrush(Color.FromArgb(128, Color.DarkGreen));
 
+		Dictionary<(byte Tileset, byte Palette), Bitmap> tilesetTileBitmaps;
+		Dictionary<(byte Tileset, byte Palette, int WidthInBlocks), Bitmap> tilesetBlockBitmaps;
+		Dictionary<(Map Map, byte Palette), Bitmap> mapBitmaps;
+
 		readonly byte bgPaletteRegister;
 
 		public GameDrawing(GameHandler gameHandler)
 		{
 			this.gameHandler = gameHandler;
 
-			tilesetTileBitmaps = new Dictionary<(byte, byte), Bitmap>();
+			tilesetTileBitmaps = new Dictionary<(byte Tileset, byte Palette), Bitmap>();
 			tilesetBlockBitmaps = new Dictionary<(byte, byte, int), Bitmap>();
 			mapBitmaps = new Dictionary<(Map, byte), Bitmap>();
 
@@ -89,6 +89,18 @@ namespace G15Map
 		{
 			if (disposing)
 			{
+				foreach (var bitmap in tilesetTileBitmaps.Where(x => x.Value != null))
+					bitmap.Value.Dispose();
+				tilesetTileBitmaps.Clear();
+
+				foreach (var bitmap in tilesetBlockBitmaps.Where(x => x.Value != null))
+					bitmap.Value.Dispose();
+				tilesetBlockBitmaps.Clear();
+
+				foreach (var bitmap in mapBitmaps.Where(x => x.Value != null))
+					bitmap.Value.Dispose();
+				mapBitmaps.Clear();
+
 				foreach (var type in collisionTypesEarly.Where(x => x.Value.Brush != null))
 					type.Value.Brush.Dispose();
 				collisionTypesEarly.Clear();
@@ -269,7 +281,7 @@ namespace G15Map
 			g.TextContrast = 0;
 
 			int step = (16 * zoom);
-			using (var font = new Font(MainForm.PrivateFontCollection.Families[0], 7.0f))
+			using (var font = new Font(UIHelpers.PrivateFontCollection.Families[0], 7.0f))
 			{
 				foreach (var warp in map.SecondaryHeader.Warps)
 				{
@@ -309,7 +321,7 @@ namespace G15Map
 			g.TextContrast = 0;
 
 			int step = (Tileset.TileDimensions * zoom);
-			using (var font = new Font(MainForm.PrivateFontCollection.Families[0], 7.0f))
+			using (var font = new Font(UIHelpers.PrivateFontCollection.Families[0], 7.0f))
 			{
 				for (int i = 0; i < 96; i++)
 				{
@@ -330,7 +342,7 @@ namespace G15Map
 			g.TextContrast = 0;
 
 			int step = (Tileset.CollisionDimensions * zoom);
-			using (var font = new Font(MainForm.PrivateFontCollection.Families[0], 7.0f))
+			using (var font = new Font(UIHelpers.PrivateFontCollection.Families[0], 7.0f))
 			{
 				for (int b = 0, bn = 0; b < tileset.CollisionData.Length; b += 4, bn++)
 				{

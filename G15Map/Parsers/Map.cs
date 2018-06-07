@@ -42,13 +42,13 @@ namespace G15Map.Parsers
 
 			long positionBackup = reader.BaseStream.Position;
 
-			reader.BaseStream.Position = Helpers.CalculateOffset(RomBank, HeaderPointer);
+			reader.BaseStream.Position = GameHelpers.CalculateOffset(RomBank, HeaderPointer);
 			PrimaryHeader = new PrimaryMapHeader(reader);
 
-			reader.BaseStream.Position = Helpers.CalculateOffset((byte)(reader.BaseStream.Position >> 14), PrimaryHeader.SecondaryHeaderPointer);
+			reader.BaseStream.Position = GameHelpers.CalculateOffset((byte)(reader.BaseStream.Position >> 14), PrimaryHeader.SecondaryHeaderPointer);
 			SecondaryHeader = new SecondaryMapHeader(reader);
 
-			reader.BaseStream.Position = Helpers.CalculateOffset((byte)(reader.BaseStream.Position >> 14), PrimaryHeader.MapDataPointer);
+			reader.BaseStream.Position = GameHelpers.CalculateOffset((byte)(reader.BaseStream.Position >> 14), PrimaryHeader.MapDataPointer);
 			MapData = reader.ReadBytes(PrimaryHeader.Width * PrimaryHeader.Height);
 
 			reader.BaseStream.Position = positionBackup;

@@ -79,22 +79,22 @@ namespace G15Map.Parsers
 
 			long positionBackup = reader.BaseStream.Position;
 
-			reader.BaseStream.Position = Helpers.CalculateOffset(Bank, BlockDataPointer);
+			reader.BaseStream.Position = GameHelpers.CalculateOffset(Bank, BlockDataPointer);
 			BlockData = reader.ReadBytes(BlockDataSize);
 			if (hackReadCommonTiles)
 			{
 				TileData = new byte[TileDataSize];
 				reader.BaseStream.Position = 0x33C00;
 				Buffer.BlockCopy(reader.ReadBytes(0x200), 0, TileData, 0, 0x200);
-				reader.BaseStream.Position = Helpers.CalculateOffset(Bank, TileDataPointer);
+				reader.BaseStream.Position = GameHelpers.CalculateOffset(Bank, TileDataPointer);
 				Buffer.BlockCopy(reader.ReadBytes(TileDataSize - 0x200), 0, TileData, 0x200, (TileDataSize - 0x200));
 			}
 			else
 			{
-				reader.BaseStream.Position = Helpers.CalculateOffset(Bank, TileDataPointer);
+				reader.BaseStream.Position = GameHelpers.CalculateOffset(Bank, TileDataPointer);
 				TileData = reader.ReadBytes(TileDataSize);
 			}
-			reader.BaseStream.Position = Helpers.CalculateOffset(Bank, CollisionDataPointer);
+			reader.BaseStream.Position = GameHelpers.CalculateOffset(Bank, CollisionDataPointer);
 			CollisionData = reader.ReadBytes(CollisionDataSize);
 
 			reader.BaseStream.Position = positionBackup;

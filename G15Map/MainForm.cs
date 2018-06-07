@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing.Text;
 
 using G15Map.Parsers;
 using G15Map.Parsers.Events;
@@ -16,8 +15,6 @@ namespace G15Map
 {
 	public partial class MainForm : Form
 	{
-		public static PrivateFontCollection PrivateFontCollection { get; private set; }
-
 		GameHandler gameHandler;
 		GameDrawing gameDrawing;
 
@@ -48,8 +45,7 @@ namespace G15Map
 
 			gridPen = new Pen(Color.FromArgb(128, Color.Gray));
 
-			PrivateFontCollection = new PrivateFontCollection();
-			AddFontFromResource(PrivateFontCollection, "G15Map.Data.PixelFont.smallest_pixel-7.ttf");
+			UIHelpers.AddFontFromResource("G15Map.Data.PixelFont.smallest_pixel-7.ttf");
 
 			spnlMap.Resize += (s, e) => { spnlMap.Refresh(); };
 			spnlBlocks.Resize += (s, e) => { spnlBlocks.Refresh(); };
@@ -154,27 +150,6 @@ namespace G15Map
 				if (foundNode != null) break;
 			}
 			return foundNode;
-		}
-
-		/* https://stackoverflow.com/a/23658552 */
-		private void AddFontFromResource(PrivateFontCollection privateFontCollection, string fontResourceName)
-		{
-			var fontBytes = GetFontResourceBytes(typeof(Program).Assembly, fontResourceName);
-			var fontData = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontBytes.Length);
-			System.Runtime.InteropServices.Marshal.Copy(fontBytes, 0, fontData, fontBytes.Length);
-			privateFontCollection.AddMemoryFont(fontData, fontBytes.Length);
-			System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontData);
-		}
-
-		private static byte[] GetFontResourceBytes(System.Reflection.Assembly assembly, string fontResourceName)
-		{
-			var resourceStream = assembly.GetManifestResourceStream(fontResourceName);
-			if (resourceStream == null)
-				throw new Exception(string.Format("Unable to find font '{0}' in embedded resources.", fontResourceName));
-			var fontBytes = new byte[resourceStream.Length];
-			resourceStream.Read(fontBytes, 0, (int)resourceStream.Length);
-			resourceStream.Close();
-			return fontBytes;
 		}
 
 		private void CreateMapTree()
