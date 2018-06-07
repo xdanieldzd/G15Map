@@ -214,6 +214,9 @@ namespace G15Map
 		public const uint DebugWarpNamesOffset = 0xFCAAF;
 		public const int NumDebugWarps = 0x2D;
 
+		public const uint TileAnimationOffset = 0x8C01F;
+		public const int NumTileAnimation = 0x3F;
+
 		//
 
 		public Tileset[] Tilesets { get; private set; }
@@ -222,6 +225,7 @@ namespace G15Map
 		public Palette[] Palettes { get; private set; }
 		public DebugWarpTarget[] DebugWarpTargets { get; private set; }
 		public string[] DebugWarpNames { get; private set; }
+		public TileAnimation[] TileAnimations { get; private set; }
 
 		public (string Name, DebugWarpTarget Target)[] DebugWarps { get; private set; }
 
@@ -266,6 +270,9 @@ namespace G15Map
 			DebugWarpNames = Enumerable.Range(0, NumDebugWarps).Select(x => ReadString(reader)).ToArray();
 
 			DebugWarps = Enumerable.Range(0, NumDebugWarps).Select(x => (Name: DebugWarpNames[x], Target: DebugWarpTargets[x])).ToArray();
+
+			reader.BaseStream.Position = TileAnimationOffset;
+			TileAnimations = Enumerable.Range(0, NumTileAnimation).Select(x => new TileAnimation(reader)).ToArray();
 		}
 
 		private string ReadString(BinaryReader reader)
