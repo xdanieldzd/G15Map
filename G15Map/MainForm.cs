@@ -54,6 +54,7 @@ namespace G15Map
 
 			showEventOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			showGridOverlayToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
+			showDebugWarpsToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			useNighttimePalettesToolStripMenuItem.CheckedChanged += (s, e) => { pbMap.Invalidate(); pbBlocks.Invalidate(); };
 			enableZoomToolStripMenuItem.CheckedChanged += (s, e) => { LoadMap(selectedMap); pbMap.Invalidate(); pbBlocks.Invalidate(); };
 #if DEBUG
@@ -211,6 +212,9 @@ namespace G15Map
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 			e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 			e.Graphics.DrawImage(mapBitmap, 0, 0, mapBitmap.Width * zoom, mapBitmap.Height * zoom);
+
+			if (showDebugWarpsToolStripMenuItem.Checked)
+				gameDrawing.DrawDebugWarpOverlay(e.Graphics, selectedMap, zoom);
 
 			if (showEventOverlayToolStripMenuItem.Checked)
 				gameDrawing.DrawEventOverlay(e.Graphics, selectedMap, selectedEvent, zoom);

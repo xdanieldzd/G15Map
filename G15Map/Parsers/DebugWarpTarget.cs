@@ -11,15 +11,15 @@ namespace G15Map.Parsers
 	{
 		public byte MapGroup { get; private set; }
 		public byte MapID { get; private set; }
-		public byte Y { get; private set; }     // ^-
-		public byte X { get; private set; }     // V- TODO verify order!
+		public byte X { get; private set; }
+		public byte Y { get; private set; }
 
 		public DebugWarpTarget(BinaryReader reader)
 		{
 			MapGroup = reader.ReadByte();
 			MapID = reader.ReadByte();
-			Y = reader.ReadByte();
 			X = reader.ReadByte();
+			Y = reader.ReadByte();
 		}
 	}
 }

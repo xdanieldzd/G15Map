@@ -56,6 +56,7 @@ namespace G15Map
 		static readonly SolidBrush warpBrush = new SolidBrush(Color.FromArgb(128, Color.Blue));
 		static readonly SolidBrush signBrush = new SolidBrush(Color.FromArgb(128, Color.DarkRed));
 		static readonly SolidBrush npcBrush = new SolidBrush(Color.FromArgb(128, Color.DarkGreen));
+		static readonly SolidBrush debugWarpBrush = new SolidBrush(Color.FromArgb(128, Color.Orange));
 
 		Dictionary<(byte Tileset, byte Palette), Bitmap> tilesetTileBitmaps;
 		Dictionary<(byte Tileset, byte Palette, int WidthInBlocks), Bitmap> tilesetBlockBitmaps;
@@ -114,6 +115,7 @@ namespace G15Map
 				warpBrush.Dispose();
 				signBrush.Dispose();
 				npcBrush.Dispose();
+				debugWarpBrush.Dispose();
 			}
 		}
 
@@ -311,6 +313,24 @@ namespace G15Map
 						g.DrawString($"{npc.Sprite:D2}\n(...)", font, Brushes.White, new Point(rect.X, rect.Y));
 					if (npc == eventObject)
 						g.DrawRectangle(Pens.Red, rect);
+				}
+			}
+		}
+
+		public void DrawDebugWarpOverlay(Graphics g, Map map, int zoom)
+		{
+			g.SmoothingMode = SmoothingMode.None;
+			g.TextContrast = 0;
+
+			int step = (16 * zoom);
+			using (var font = new Font(UIHelpers.PrivateFontCollection.Families[0], 7.0f))
+			{
+				foreach (var (Name, Target) in gameHandler.DebugWarps)
+				{
+					if (Target.MapGroup != (map.ParentGroup + 1) || (Array.IndexOf(gameHandler.Maps[map.ParentGroup], map) + 1) != Target.MapID) continue;
+
+					var rect = new Rectangle(Target.X * step, Target.Y * step, step, step);
+					g.FillRectangle(debugWarpBrush, rect);
 				}
 			}
 		}
