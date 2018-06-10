@@ -16,6 +16,9 @@ namespace G15Map.Parsers
 		// TODO: common part for *outdoor tilesets* at 0x33C00, 0x200 bytes, for tiles 0x00-0x1F!
 		// NOTES: 00:2D51 -> pointer to common tiles (007C -> xx:3C00)
 
+		// https://github.com/pret/pokegold-spaceworld/blob/ece3adc39bad4f6bbd041a83ace7acb21dc586b7/home/map.asm#L1517
+		// 00:2D29 -> reg A == map type, if A==(01,02) loadcommon; 00:2D31 -> reg A == tileset ID, if A==1B loadcommon
+
 		// 23:401F (0x8C01F) -> animation data; 0xFC bytes, 4 bytes per entry: [RAM address 2b][function address 2b]
 
 		//  (addresses might be incorrect as anim *starts*)

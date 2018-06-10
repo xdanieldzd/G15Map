@@ -9,6 +9,8 @@ namespace G15Map.Parsers.Events
 {
 	public class Warp : IEventObject
 	{
+		public long RomOffset { get; private set; }
+
 		public byte Y { get; private set; }
 		public byte X { get; private set; }
 		public byte TargetWarpIndex { get; private set; }
@@ -18,6 +20,8 @@ namespace G15Map.Parsers.Events
 
 		public Warp(BinaryReader reader)
 		{
+			RomOffset = reader.BaseStream.Position;
+
 			Y = reader.ReadByte();
 			X = reader.ReadByte();
 			TargetWarpIndex = reader.ReadByte();

@@ -8,6 +8,8 @@ namespace G15Map.Parsers.Events
 {
 	public interface IEventObject
 	{
+		long RomOffset { get; }
+
 		byte X { get; }
 		byte Y { get; }
 	}

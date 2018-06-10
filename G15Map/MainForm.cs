@@ -287,7 +287,7 @@ namespace G15Map
 			if (eventObject is Warp warp)
 			{
 				MessageBox.Show(
-					$"Warp {Array.IndexOf(selectedMap.SecondaryHeader.Warps, warp) + 1:D2}:\n\n" +
+					$"Warp #{Array.IndexOf(selectedMap.SecondaryHeader.Warps, warp) + 1:D2} - Offset 0x{warp.RomOffset:X6}:\n\n" +
 					$"Target Warp Index: {warp.TargetWarpIndex:D2}\n" +
 					$"Target Map Group: {warp.TargetMapGroup:D2}\n" +
 					$"Target Map ID: {warp.TargetMapID:D2}\n" +
@@ -297,7 +297,7 @@ namespace G15Map
 			else if (eventObject is Sign sign)
 			{
 				MessageBox.Show(
-					$"Sign {Array.IndexOf(selectedMap.SecondaryHeader.Signs, sign) + 1:D2}:\n\n" +
+					$"Sign #{Array.IndexOf(selectedMap.SecondaryHeader.Signs, sign) + 1:D2} - Offset 0x{sign.RomOffset:X6}:\n\n" +
 					$"Text ID: {sign.TextID:D2}\n" +
 					$"(Unknown: 0x{sign.Unknown:X4})\n",
 					"Sign Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -305,10 +305,11 @@ namespace G15Map
 			else if (eventObject is NPC npc)
 			{
 				MessageBox.Show(
-					$"NPC {Array.IndexOf(selectedMap.SecondaryHeader.NPCs, npc) + 1:D2}:\n\n" +
+					$"NPC #{Array.IndexOf(selectedMap.SecondaryHeader.NPCs, npc) + 1:D2} - Offset 0x{npc.RomOffset:X6}:\n\n" +
 					$"Sprite: {npc.Sprite:D2}\n" +
-					$"(Unknown: 0x{npc.Unknown1:X2})\n" +
-					$"(Unknown: 0x{npc.Unknown2:X2})\n" +
+					$"Movement type: {(Enum.IsDefined(typeof(NPCMovementType), npc.MovementType) ? npc.MovementType.ToString() : $"{(byte)npc.MovementType:X2}, invalid?")}\n" +
+					$"Movement distance N/S: {npc.MovementDistanceNorthSouth} step(s)\n" +
+					$"Movement distance E/W: {npc.MovementDistanceEastWest} step(s)\n" +
 					$"(Unknown: 0x{npc.Unknown3:X4})\n" +
 					$"(Unknown: 0x{npc.Unknown4:X4})\n" +
 					$"(Unknown: 0x{npc.Unknown5:X4})\n" +

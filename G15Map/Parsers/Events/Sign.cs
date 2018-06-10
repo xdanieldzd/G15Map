@@ -9,6 +9,8 @@ namespace G15Map.Parsers.Events
 {
 	public class Sign : IEventObject
 	{
+		public long RomOffset { get; private set; }
+
 		public byte Y { get; private set; }
 		public byte X { get; private set; }
 		public byte Unknown { get; private set; }
@@ -16,6 +18,8 @@ namespace G15Map.Parsers.Events
 
 		public Sign(BinaryReader reader)
 		{
+			RomOffset = reader.BaseStream.Position;
+
 			Y = reader.ReadByte();
 			X = reader.ReadByte();
 			Unknown = reader.ReadByte();
