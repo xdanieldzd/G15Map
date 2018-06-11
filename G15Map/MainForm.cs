@@ -98,7 +98,7 @@ namespace G15Map
 				var mapBitmap = gameDrawing.GetMapBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked);
 				pbMap.ClientSize = new Size(mapBitmap.Width * zoom, mapBitmap.Height * zoom);
 
-				var blockBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap.Tileset, selectedMap.Location, blocksWidth);
+				var blockBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap.Tileset, selectedMap.Location, selectedMap.Type, blocksWidth);
 				pbBlocks.ClientSize = new Size(blockBitmap.Width * 2, blockBitmap.Height * 2);
 
 				spnlBlocks.VerticalScroll.SmallChange = 64;
@@ -263,7 +263,7 @@ namespace G15Map
 		{
 			if (selectedMap == null) return;
 
-			var blocksBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked, blocksWidth);
+			var blocksBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked, selectedMap.Type, blocksWidth);
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 			e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 			e.Graphics.DrawImage(blocksBitmap, 0, 0, blocksBitmap.Width * 2, blocksBitmap.Height * 2);
@@ -377,7 +377,7 @@ namespace G15Map
 			{
 				tilesetForm.Initialize(gameHandler, gameDrawing);
 				if (selectedMap != null)
-					tilesetForm.SetTilesetAndPalette(selectedMap.Tileset, gameDrawing.GetPaletteIndex(selectedMap, useNighttimePalettesToolStripMenuItem.Checked));
+					tilesetForm.SetTilesetAndPalette(selectedMap.Tileset, gameDrawing.GetPaletteIndex(selectedMap, useNighttimePalettesToolStripMenuItem.Checked), selectedMap.Type);
 				tilesetForm.ShowDialog();
 			}
 		}

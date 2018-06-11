@@ -42,6 +42,7 @@
 			this.btnSaveTileset = new System.Windows.Forms.Button();
 			this.btnSaveBlocks = new System.Windows.Forms.Button();
 			this.sfdSaveImage = new System.Windows.Forms.SaveFileDialog();
+			this.chkAddCommonTiles = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.nudTilesetNo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbTiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudPaletteNo)).BeginInit();
@@ -122,7 +123,7 @@
 			// chkEarlyCollisionMapping
 			// 
 			this.chkEarlyCollisionMapping.AutoSize = true;
-			this.chkEarlyCollisionMapping.Location = new System.Drawing.Point(15, 67);
+			this.chkEarlyCollisionMapping.Location = new System.Drawing.Point(137, 67);
 			this.chkEarlyCollisionMapping.Name = "chkEarlyCollisionMapping";
 			this.chkEarlyCollisionMapping.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
 			this.chkEarlyCollisionMapping.Size = new System.Drawing.Size(133, 20);
@@ -133,7 +134,7 @@
 			// chkShowGrids
 			// 
 			this.chkShowGrids.AutoSize = true;
-			this.chkShowGrids.Location = new System.Drawing.Point(155, 41);
+			this.chkShowGrids.Location = new System.Drawing.Point(15, 67);
 			this.chkShowGrids.Name = "chkShowGrids";
 			this.chkShowGrids.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
 			this.chkShowGrids.Size = new System.Drawing.Size(83, 20);
@@ -192,12 +193,24 @@
 			// 
 			this.sfdSaveImage.Filter = "Image Files (*.png; *.bmp)|*.png;*.bmp";
 			// 
+			// chkAddCommonTiles
+			// 
+			this.chkAddCommonTiles.AutoSize = true;
+			this.chkAddCommonTiles.Location = new System.Drawing.Point(137, 41);
+			this.chkAddCommonTiles.Name = "chkAddCommonTiles";
+			this.chkAddCommonTiles.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
+			this.chkAddCommonTiles.Size = new System.Drawing.Size(141, 20);
+			this.chkAddCommonTiles.TabIndex = 14;
+			this.chkAddCommonTiles.Text = "Add Common Map Tiles";
+			this.chkAddCommonTiles.UseVisualStyleBackColor = true;
+			// 
 			// TilesetForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnClose;
 			this.ClientSize = new System.Drawing.Size(299, 587);
+			this.Controls.Add(this.chkAddCommonTiles);
 			this.Controls.Add(this.btnSaveBlocks);
 			this.Controls.Add(this.btnSaveTileset);
 			this.Controls.Add(this.chkShowGrids);
@@ -244,5 +257,6 @@
 		private System.Windows.Forms.Button btnSaveTileset;
 		private System.Windows.Forms.Button btnSaveBlocks;
 		private System.Windows.Forms.SaveFileDialog sfdSaveImage;
+		private System.Windows.Forms.CheckBox chkAddCommonTiles;
 	}
 }

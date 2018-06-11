@@ -40,8 +40,9 @@ namespace G15Map
 			nudPaletteNo.ValueChanged += (s, e) => { GetAndDrawTileset(); GetAndDrawBlocks(); };
 
 			chkShowOverlays.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
-			chkEarlyCollisionMapping.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
 			chkShowGrids.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
+			chkEarlyCollisionMapping.CheckedChanged += (s, e) => { pbTiles.Invalidate(); pbBlocks.Invalidate(); };
+			chkAddCommonTiles.CheckedChanged += (s, e) => { GetAndDrawTileset(); GetAndDrawBlocks(); pbTiles.Invalidate(); pbBlocks.Invalidate(); };
 
 			pbBlocks.MouseDown += (s, e) => { pbBlocks.Parent?.Focus(); };
 		}
@@ -58,15 +59,17 @@ namespace G15Map
 			GetAndDrawBlocks();
 		}
 
-		public void SetTilesetAndPalette(byte tilesetIdx, byte paletteIdx)
+		public void SetTilesetAndPalette(byte tilesetIdx, byte paletteIdx, byte mapType)
 		{
+			chkAddCommonTiles.Checked = gameDrawing.IsCommonTilesNeeded(mapType, tilesetIdx);
+
 			nudTilesetNo.Value = tilesetIdx;
 			nudPaletteNo.Value = paletteIdx;
 		}
 
 		private void GetAndDrawTileset()
 		{
-			tilesetBitmap = gameDrawing.GetTilesetBitmap((byte)nudTilesetNo.Value, (byte)nudPaletteNo.Value);
+			tilesetBitmap = gameDrawing.GetTilesetBitmap((byte)nudTilesetNo.Value, (byte)nudPaletteNo.Value, (byte)(chkAddCommonTiles.Checked ? 1 : 0));
 
 			tilesetX = (pbTiles.ClientSize.Width - (tilesetBitmap.Width * tilesetZoom)) / 2;
 			tilesetY = (pbTiles.ClientSize.Height - (tilesetBitmap.Height * tilesetZoom)) / 2;
@@ -78,7 +81,7 @@ namespace G15Map
 
 		private void GetAndDrawBlocks()
 		{
-			blockBitmap = gameDrawing.GetTilesetBlocksBitmap((byte)nudTilesetNo.Value, (byte)nudPaletteNo.Value, 4);
+			blockBitmap = gameDrawing.GetTilesetBlocksBitmap((byte)nudTilesetNo.Value, (byte)nudPaletteNo.Value, (byte)(chkAddCommonTiles.Checked ? 1 : 0), 4);
 			pbBlocks.ClientSize = new Size(blockBitmap.Width * blockZoom, blockBitmap.Height * blockZoom);
 			pbBlocks.Invalidate();
 

@@ -200,6 +200,10 @@ namespace G15Map
 			{ 0xFF, "９" },
 		};
 
+		// TODO: 00:2D51 -> pointer to common tiles (007C -> xx:3C00) -- use pointer instead of hardcoded address (tho bank is still missing)?
+		public const uint CommonMapTilesOffset = 0x33C00;
+		public const int CommonMapTilesSize = 0x200;
+
 		public const uint TilesetOffset = 0xC88D;
 		public const int NumTilesets = 0x1C;
 
@@ -217,8 +221,7 @@ namespace G15Map
 		public const uint TileAnimationOffset = 0x8C01F;
 		public const int NumTileAnimation = 0x3F;
 
-		//
-
+		public byte[] CommonMapTiles { get; private set; }
 		public Tileset[] Tilesets { get; private set; }
 		public Map[][] Maps { get; private set; }
 		public byte[] MapGroupPalettes { get; private set; }
@@ -229,12 +232,13 @@ namespace G15Map
 
 		public (string Name, DebugWarpTarget Target)[] DebugWarps { get; private set; }
 
-		//
-
 		public GameHandler(BinaryReader reader)
 		{
+			reader.BaseStream.Position = CommonMapTilesOffset;
+			CommonMapTiles = reader.ReadBytes(CommonMapTilesSize);
+
 			reader.BaseStream.Position = TilesetOffset;
-			Tilesets = Enumerable.Range(0, NumTilesets).Select(x => new Tileset(reader, (x < 0x09 || x > 0x18))).ToArray();
+			Tilesets = Enumerable.Range(0, NumTilesets).Select(x => new Tileset(reader)).ToArray();
 
 			reader.BaseStream.Position = MapGroupsListOffset;
 			var mapGroupPointers = Enumerable.Range(0, NumMapGroups).Select(x => reader.ReadUInt16()).ToArray();

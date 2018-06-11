@@ -58,8 +58,10 @@ namespace G15Map
 		static readonly SolidBrush npcBrush = new SolidBrush(Color.FromArgb(128, Color.DarkGreen));
 		static readonly SolidBrush debugWarpBrush = new SolidBrush(Color.FromArgb(128, Color.Orange));
 
-		Dictionary<(byte Tileset, byte Palette), Bitmap> tilesetTileBitmaps;
-		Dictionary<(byte Tileset, byte Palette, int WidthInBlocks), Bitmap> tilesetBlockBitmaps;
+		Dictionary<byte, Bitmap> commonMapTilesBitmaps;
+		Dictionary<(byte Tileset, byte Palette), Bitmap> basicTilesetTileBitmaps;
+		Dictionary<(byte Tileset, byte Palette, byte MapType), Bitmap> tilesetTileBitmaps;
+		Dictionary<(byte Tileset, byte Palette, byte MapType, int WidthInBlocks), Bitmap> tilesetBlockBitmaps;
 		Dictionary<(Map Map, byte Palette), Bitmap> mapBitmaps;
 
 		readonly byte bgPaletteRegister;
@@ -68,9 +70,12 @@ namespace G15Map
 		{
 			this.gameHandler = gameHandler;
 
-			tilesetTileBitmaps = new Dictionary<(byte Tileset, byte Palette), Bitmap>();
-			tilesetBlockBitmaps = new Dictionary<(byte, byte, int), Bitmap>();
-			mapBitmaps = new Dictionary<(Map, byte), Bitmap>();
+			commonMapTilesBitmaps = new Dictionary<byte, Bitmap>();
+			basicTilesetTileBitmaps = new Dictionary<(byte Tileset, byte Palette), Bitmap>();
+
+			tilesetTileBitmaps = new Dictionary<(byte Tileset, byte Palette, byte MapType), Bitmap>();
+			tilesetBlockBitmaps = new Dictionary<(byte Tileset, byte Palette, byte MapType, int WidthInBlocks), Bitmap>();
+			mapBitmaps = new Dictionary<(Map Map, byte Palette), Bitmap>();
 
 			bgPaletteRegister = 0xD8;
 		}
@@ -90,28 +95,27 @@ namespace G15Map
 		{
 			if (disposing)
 			{
-				foreach (var bitmap in tilesetTileBitmaps.Where(x => x.Value != null))
-					bitmap.Value.Dispose();
+				foreach (var bitmap in commonMapTilesBitmaps.Where(x => x.Value != null)) bitmap.Value.Dispose();
+				commonMapTilesBitmaps.Clear();
+				foreach (var bitmap in basicTilesetTileBitmaps.Where(x => x.Value != null)) bitmap.Value.Dispose();
+				basicTilesetTileBitmaps.Clear();
+
+				foreach (var bitmap in tilesetTileBitmaps.Where(x => x.Value != null)) bitmap.Value.Dispose();
 				tilesetTileBitmaps.Clear();
-
-				foreach (var bitmap in tilesetBlockBitmaps.Where(x => x.Value != null))
-					bitmap.Value.Dispose();
+				foreach (var bitmap in tilesetBlockBitmaps.Where(x => x.Value != null)) bitmap.Value.Dispose();
 				tilesetBlockBitmaps.Clear();
-
-				foreach (var bitmap in mapBitmaps.Where(x => x.Value != null))
-					bitmap.Value.Dispose();
+				foreach (var bitmap in mapBitmaps.Where(x => x.Value != null)) bitmap.Value.Dispose();
 				mapBitmaps.Clear();
 
-				foreach (var type in collisionTypesEarly.Where(x => x.Value.Brush != null))
-					type.Value.Brush.Dispose();
+				foreach (var type in collisionTypesEarly.Where(x => x.Value.Brush != null)) type.Value.Brush.Dispose();
 				collisionTypesEarly.Clear();
 
-				foreach (var type in collisionTypesUsed.Where(x => x.Value.Brush != null))
-					type.Value.Brush.Dispose();
+				foreach (var type in collisionTypesUsed.Where(x => x.Value.Brush != null)) type.Value.Brush.Dispose();
 				collisionTypesUsed.Clear();
 
 				genericBlackBrush.Dispose();
 				genericGrayBrush.Dispose();
+
 				warpBrush.Dispose();
 				signBrush.Dispose();
 				npcBrush.Dispose();
@@ -119,11 +123,61 @@ namespace G15Map
 			}
 		}
 
-		public Bitmap GetTilesetBitmap(byte tilesetIdx, byte paletteIdx)
+		private void ConvertTileDataToRGBA(byte[] tileData, Color[] palette, byte bgPaletteRegister, int width, int height, PixelFormat pixelFormat, ref byte[] pixelData)
 		{
-			if (tilesetTileBitmaps.ContainsKey((tilesetIdx, paletteIdx)))
+			int bytesPerPixel = (Image.GetPixelFormatSize(pixelFormat) / 8);
+
+			for (int t = 0; t < tileData.Length; t += 2)
 			{
-				return tilesetTileBitmaps[(tilesetIdx, paletteIdx)];
+				int dx = (((t >> 4) << 3) % width);
+				int dy = ((((t >> 1) % 8) + ((t >> 8) << 3)) % height);
+
+				for (int x = 0; x < 8; x++)
+				{
+					var raw = (((((tileData[t] >> (7 - x)) & 0x01) << 1) | (tileData[t + 1] >> (7 - x)) & 0x01) & 0x03);
+					var color = ((bgPaletteRegister >> (raw << 1)) & 0x03);
+
+					var offset = (((dy * width) + (dx + x)) * bytesPerPixel);
+					if (offset >= pixelData.Length) continue;
+
+					pixelData[offset + 0] = palette[color].B;
+					pixelData[offset + 1] = palette[color].G;
+					pixelData[offset + 2] = palette[color].R;
+					pixelData[offset + 3] = palette[color].A;
+				}
+			}
+		}
+
+		private Bitmap GetCommonMapTilesBitmap(byte paletteIdx)
+		{
+			if (commonMapTilesBitmaps.ContainsKey(paletteIdx))
+			{
+				return commonMapTilesBitmaps[paletteIdx];
+			}
+			else
+			{
+				Palette palette = gameHandler.Palettes[paletteIdx];
+
+				Bitmap bitmap = new Bitmap(128, 16);
+				BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+				byte[] pixelData = new byte[bitmapData.Height * bitmapData.Stride];
+				Marshal.Copy(bitmapData.Scan0, pixelData, 0, pixelData.Length);
+
+				ConvertTileDataToRGBA(gameHandler.CommonMapTiles, palette.Colors, bgPaletteRegister, bitmap.Width, bitmap.Height, bitmap.PixelFormat, ref pixelData);
+
+				Marshal.Copy(pixelData, 0, bitmapData.Scan0, pixelData.Length);
+				bitmap.UnlockBits(bitmapData);
+
+				return (commonMapTilesBitmaps[paletteIdx] = bitmap);
+			}
+		}
+
+		private Bitmap GetBasicTilesetBitmap(byte tilesetIdx, byte paletteIdx)
+		{
+			if (basicTilesetTileBitmaps.ContainsKey((tilesetIdx, paletteIdx)))
+			{
+				return basicTilesetTileBitmaps[(tilesetIdx, paletteIdx)];
 			}
 			else
 			{
@@ -136,32 +190,48 @@ namespace G15Map
 				byte[] pixelData = new byte[bitmapData.Height * bitmapData.Stride];
 				Marshal.Copy(bitmapData.Scan0, pixelData, 0, pixelData.Length);
 
-				for (int t = 0, p = 0; t < tileset.TileData.Length; t += 2)
-				{
-					int dx = (((t >> 4) << 3) % bitmap.Width);
-					int dy = ((((t >> 1) % 8) + ((t >> 8) << 3)) % bitmap.Height);
-
-					for (int x = 0; x < 8; x++)
-					{
-						var raw = (((((tileset.TileData[t] >> (7 - x)) & 0x01) << 1) | (tileset.TileData[t + 1] >> (7 - x)) & 0x01) & 0x03);
-						var color = ((bgPaletteRegister >> (raw << 1)) & 0x03);
-
-						p = ((dy * bitmap.Width) + (dx + x)) * (Image.GetPixelFormatSize(bitmap.PixelFormat) / 8);
-
-						if (p >= pixelData.Length) continue;
-
-						pixelData[p + 0] = palette.Colors[color].B;
-						pixelData[p + 1] = palette.Colors[color].G;
-						pixelData[p + 2] = palette.Colors[color].R;
-						pixelData[p + 3] = palette.Colors[color].A;
-					}
-				}
+				ConvertTileDataToRGBA(tileset.TileData, palette.Colors, bgPaletteRegister, bitmap.Width, bitmap.Height, bitmap.PixelFormat, ref pixelData);
 
 				Marshal.Copy(pixelData, 0, bitmapData.Scan0, pixelData.Length);
 				bitmap.UnlockBits(bitmapData);
 
-				return (tilesetTileBitmaps[(tilesetIdx, paletteIdx)] = bitmap);
+				return (basicTilesetTileBitmaps[(tilesetIdx, paletteIdx)] = bitmap);
 			}
+		}
+
+		public Bitmap GetTilesetBitmap(byte tilesetIdx, byte paletteIdx, byte mapType)
+		{
+			if (tilesetTileBitmaps.ContainsKey((tilesetIdx, paletteIdx, mapType)))
+			{
+				return tilesetTileBitmaps[(tilesetIdx, paletteIdx, mapType)];
+			}
+			else
+			{
+				Bitmap bitmap = new Bitmap(128, 48);
+
+				using (Graphics g = Graphics.FromImage(bitmap))
+				{
+					if (IsCommonTilesNeeded(mapType, tilesetIdx))
+					{
+						g.DrawImage(GetCommonMapTilesBitmap(paletteIdx), 0, 0);
+						g.DrawImage(GetBasicTilesetBitmap(tilesetIdx, paletteIdx), 0, 16);
+					}
+					else
+					{
+						g.DrawImage(GetBasicTilesetBitmap(tilesetIdx, paletteIdx), 0, 0);
+					}
+				}
+
+				return (tilesetTileBitmaps[(tilesetIdx, paletteIdx, mapType)] = bitmap);
+			}
+		}
+
+		public bool IsCommonTilesNeeded(byte mapType, byte tilesetIdx)
+		{
+			// https://github.com/pret/pokegold-spaceworld/blob/ece3adc39bad4f6bbd041a83ace7acb21dc586b7/home/map.asm#L1517
+			// 00:2D29 -> reg A == map type, if A==(01,02) loadcommon; 00:2D31 -> reg A == tileset ID, if A==1B loadcommon
+
+			return (mapType == 0x01 || mapType == 0x02 || tilesetIdx == 0x1B);
 		}
 
 		public byte GetPaletteIndex(Map map, bool isNighttime)
@@ -195,16 +265,16 @@ namespace G15Map
 			return paletteIdx;
 		}
 
-		public Bitmap GetTilesetBlocksBitmap(Map map, bool isNighttime, int widthInBlocks)
+		public Bitmap GetTilesetBlocksBitmap(Map map, bool isNighttime, byte mapType, int widthInBlocks)
 		{
-			return GetTilesetBlocksBitmap(map.Tileset, GetPaletteIndex(map, isNighttime), widthInBlocks);
+			return GetTilesetBlocksBitmap(map.Tileset, GetPaletteIndex(map, isNighttime), mapType, widthInBlocks);
 		}
 
-		public Bitmap GetTilesetBlocksBitmap(byte tilesetIdx, byte paletteIdx, int widthInBlocks)
+		public Bitmap GetTilesetBlocksBitmap(byte tilesetIdx, byte paletteIdx, byte mapType, int widthInBlocks)
 		{
-			if (tilesetBlockBitmaps.ContainsKey((tilesetIdx, paletteIdx, widthInBlocks)))
+			if (tilesetBlockBitmaps.ContainsKey((tilesetIdx, paletteIdx, mapType, widthInBlocks)))
 			{
-				return tilesetBlockBitmaps[(tilesetIdx, paletteIdx, widthInBlocks)];
+				return tilesetBlockBitmaps[(tilesetIdx, paletteIdx, mapType, widthInBlocks)];
 			}
 			else
 			{
@@ -213,7 +283,7 @@ namespace G15Map
 
 				Tileset tileset = gameHandler.Tilesets[tilesetIdx];
 
-				Bitmap tilesetBitmap = GetTilesetBitmap(tilesetIdx, paletteIdx);
+				Bitmap tilesetBitmap = GetTilesetBitmap(tilesetIdx, paletteIdx, mapType);
 				Bitmap bitmap = new Bitmap(imageWidth, imageHeight);
 
 				using (var g = Graphics.FromImage(bitmap))
@@ -240,7 +310,7 @@ namespace G15Map
 					}
 				}
 
-				return (tilesetBlockBitmaps[(tilesetIdx, paletteIdx, widthInBlocks)] = bitmap);
+				return (tilesetBlockBitmaps[(tilesetIdx, paletteIdx, mapType, widthInBlocks)] = bitmap);
 			}
 		}
 
@@ -255,7 +325,7 @@ namespace G15Map
 			{
 				if (map == null || !map.IsValid) return new Bitmap(Tileset.BlockDimensions, Tileset.BlockDimensions);
 
-				Bitmap blocksBitmap = GetTilesetBlocksBitmap(map, isNighttime, 1);
+				Bitmap blocksBitmap = GetTilesetBlocksBitmap(map, isNighttime, map.Type, 1);
 				Bitmap bitmap = new Bitmap(map.PrimaryHeader.Width * Tileset.BlockDimensions, map.PrimaryHeader.Height * Tileset.BlockDimensions);
 
 				using (var g = Graphics.FromImage(bitmap))
