@@ -9,33 +9,36 @@ namespace G15Map.Parsers
 {
 	public class Map
 	{
+		public long RomOffset { get; private set; }
+		public byte ParentGroup { get; private set; }
+
 		public byte RomBank { get; private set; }
 		public byte Tileset { get; private set; }
 		public byte Type { get; private set; }
 		public ushort HeaderPointer { get; private set; }
-		public byte Location { get; private set; }
-		public byte Music { get; private set; }
-		public byte ZeroPadding { get; private set; }
+		public byte TownMapLocation { get; private set; }
+		public byte Unknown1 { get; private set; }
+		public byte Unknown2 { get; private set; }
 
-		public bool IsValid { get { return (ZeroPadding == 0); } }
+		public bool IsValid { get { return (Unknown2 == 0); } }
 
 		public PrimaryMapHeader PrimaryHeader { get; private set; }
 		public SecondaryMapHeader SecondaryHeader { get; private set; }
 
-		public byte ParentGroup { get; private set; }
 		public byte[] MapData { get; private set; }
 
 		public Map(BinaryReader reader, byte mapGroup)
 		{
+			RomOffset = reader.BaseStream.Position;
 			ParentGroup = mapGroup;
 
 			RomBank = reader.ReadByte();
 			Tileset = reader.ReadByte();
 			Type = reader.ReadByte();
 			HeaderPointer = reader.ReadUInt16();
-			Location = reader.ReadByte();
-			Music = reader.ReadByte();
-			ZeroPadding = reader.ReadByte();
+			TownMapLocation = reader.ReadByte();
+			Unknown1 = reader.ReadByte();
+			Unknown2 = reader.ReadByte();
 
 			if (!IsValid)
 				return;

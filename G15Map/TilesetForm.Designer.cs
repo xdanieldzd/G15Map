@@ -57,7 +57,7 @@
 			this.btnClose.Location = new System.Drawing.Point(212, 552);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(75, 23);
-			this.btnClose.TabIndex = 0;
+			this.btnClose.TabIndex = 11;
 			this.btnClose.Text = "&Close";
 			this.btnClose.UseVisualStyleBackColor = true;
 			// 
@@ -76,7 +76,7 @@
 			this.lblTilesetNo.Margin = new System.Windows.Forms.Padding(3, 0, 12, 3);
 			this.lblTilesetNo.Name = "lblTilesetNo";
 			this.lblTilesetNo.Size = new System.Drawing.Size(41, 13);
-			this.lblTilesetNo.TabIndex = 3;
+			this.lblTilesetNo.TabIndex = 0;
 			this.lblTilesetNo.Text = "Tileset:";
 			// 
 			// pbTiles
@@ -96,7 +96,7 @@
 			this.lblPaletteNo.Margin = new System.Windows.Forms.Padding(3, 0, 12, 3);
 			this.lblPaletteNo.Name = "lblPaletteNo";
 			this.lblPaletteNo.Size = new System.Drawing.Size(43, 13);
-			this.lblPaletteNo.TabIndex = 6;
+			this.lblPaletteNo.TabIndex = 2;
 			this.lblPaletteNo.Text = "Palette:";
 			// 
 			// nudPaletteNo
@@ -105,7 +105,7 @@
 			this.nudPaletteNo.Margin = new System.Windows.Forms.Padding(3, 3, 12, 6);
 			this.nudPaletteNo.Name = "nudPaletteNo";
 			this.nudPaletteNo.Size = new System.Drawing.Size(70, 20);
-			this.nudPaletteNo.TabIndex = 5;
+			this.nudPaletteNo.TabIndex = 3;
 			// 
 			// chkShowOverlays
 			// 
@@ -116,7 +116,7 @@
 			this.chkShowOverlays.Name = "chkShowOverlays";
 			this.chkShowOverlays.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
 			this.chkShowOverlays.Size = new System.Drawing.Size(100, 20);
-			this.chkShowOverlays.TabIndex = 9;
+			this.chkShowOverlays.TabIndex = 4;
 			this.chkShowOverlays.Text = "Show Overlays";
 			this.chkShowOverlays.UseVisualStyleBackColor = true;
 			// 
@@ -127,7 +127,7 @@
 			this.chkEarlyCollisionMapping.Name = "chkEarlyCollisionMapping";
 			this.chkEarlyCollisionMapping.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
 			this.chkEarlyCollisionMapping.Size = new System.Drawing.Size(133, 20);
-			this.chkEarlyCollisionMapping.TabIndex = 10;
+			this.chkEarlyCollisionMapping.TabIndex = 7;
 			this.chkEarlyCollisionMapping.Text = "Assume Early Collision";
 			this.chkEarlyCollisionMapping.UseVisualStyleBackColor = true;
 			// 
@@ -138,7 +138,7 @@
 			this.chkShowGrids.Name = "chkShowGrids";
 			this.chkShowGrids.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
 			this.chkShowGrids.Size = new System.Drawing.Size(83, 20);
-			this.chkShowGrids.TabIndex = 11;
+			this.chkShowGrids.TabIndex = 5;
 			this.chkShowGrids.Text = "Show Grids";
 			this.chkShowGrids.UseVisualStyleBackColor = true;
 			// 
@@ -155,7 +155,7 @@
 			this.spnlBlocks.Location = new System.Drawing.Point(12, 241);
 			this.spnlBlocks.Name = "spnlBlocks";
 			this.spnlBlocks.Size = new System.Drawing.Size(275, 275);
-			this.spnlBlocks.TabIndex = 8;
+			this.spnlBlocks.TabIndex = 9;
 			this.spnlBlocks.TabStop = true;
 			// 
 			// pbBlocks
@@ -174,7 +174,7 @@
 			this.btnSaveTileset.Location = new System.Drawing.Point(12, 212);
 			this.btnSaveTileset.Name = "btnSaveTileset";
 			this.btnSaveTileset.Size = new System.Drawing.Size(275, 23);
-			this.btnSaveTileset.TabIndex = 12;
+			this.btnSaveTileset.TabIndex = 8;
 			this.btnSaveTileset.Text = "Save Tileset Image...";
 			this.btnSaveTileset.UseVisualStyleBackColor = true;
 			this.btnSaveTileset.Click += new System.EventHandler(this.btnSaveTileset_Click);
@@ -184,7 +184,7 @@
 			this.btnSaveBlocks.Location = new System.Drawing.Point(12, 522);
 			this.btnSaveBlocks.Name = "btnSaveBlocks";
 			this.btnSaveBlocks.Size = new System.Drawing.Size(275, 23);
-			this.btnSaveBlocks.TabIndex = 13;
+			this.btnSaveBlocks.TabIndex = 10;
 			this.btnSaveBlocks.Text = "Save Block Image...";
 			this.btnSaveBlocks.UseVisualStyleBackColor = true;
 			this.btnSaveBlocks.Click += new System.EventHandler(this.btnSaveBlocks_Click);
@@ -200,7 +200,7 @@
 			this.chkAddCommonTiles.Name = "chkAddCommonTiles";
 			this.chkAddCommonTiles.Padding = new System.Windows.Forms.Padding(0, 0, 3, 3);
 			this.chkAddCommonTiles.Size = new System.Drawing.Size(141, 20);
-			this.chkAddCommonTiles.TabIndex = 14;
+			this.chkAddCommonTiles.TabIndex = 6;
 			this.chkAddCommonTiles.Text = "Add Common Map Tiles";
 			this.chkAddCommonTiles.UseVisualStyleBackColor = true;
 			// 

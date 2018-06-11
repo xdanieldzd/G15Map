@@ -36,12 +36,14 @@
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mapInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.eventInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.tilesetViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showEventOverlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showGridOverlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showDebugWarpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.useNighttimePalettesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.enableZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,7 +58,6 @@
 			this.pbMap = new System.Windows.Forms.PictureBox();
 			this.spnlBlocks = new G15Map.SelectablePanel();
 			this.pbBlocks = new System.Windows.Forms.PictureBox();
-			this.showDebugWarpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.statusStrip.SuspendLayout();
 			this.spnlMap.SuspendLayout();
@@ -75,7 +76,7 @@
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
 			this.menuStrip.Size = new System.Drawing.Size(1134, 24);
-			this.menuStrip.TabIndex = 6;
+			this.menuStrip.TabIndex = 0;
 			this.menuStrip.Text = "menuStrip1";
 			// 
 			// fileToolStripMenuItem
@@ -125,6 +126,7 @@
 			// viewerToolStripMenuItem
 			// 
 			this.viewerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mapInformationToolStripMenuItem,
             this.eventInformationToolStripMenuItem,
             this.toolStripMenuItem4,
             this.tilesetViewerToolStripMenuItem});
@@ -132,24 +134,32 @@
 			this.viewerToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
 			this.viewerToolStripMenuItem.Text = "&Viewer";
 			// 
+			// mapInformationToolStripMenuItem
+			// 
+			this.mapInformationToolStripMenuItem.Enabled = false;
+			this.mapInformationToolStripMenuItem.Name = "mapInformationToolStripMenuItem";
+			this.mapInformationToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.mapInformationToolStripMenuItem.Text = "&Map Information...";
+			this.mapInformationToolStripMenuItem.Click += new System.EventHandler(this.mapInformationToolStripMenuItem_Click);
+			// 
 			// eventInformationToolStripMenuItem
 			// 
 			this.eventInformationToolStripMenuItem.Enabled = false;
 			this.eventInformationToolStripMenuItem.Name = "eventInformationToolStripMenuItem";
-			this.eventInformationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.eventInformationToolStripMenuItem.Text = "Event &Information...";
+			this.eventInformationToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.eventInformationToolStripMenuItem.Text = "&Event Information...";
 			this.eventInformationToolStripMenuItem.Click += new System.EventHandler(this.eventInformationToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(177, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(175, 6);
 			// 
 			// tilesetViewerToolStripMenuItem
 			// 
 			this.tilesetViewerToolStripMenuItem.Enabled = false;
 			this.tilesetViewerToolStripMenuItem.Name = "tilesetViewerToolStripMenuItem";
-			this.tilesetViewerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.tilesetViewerToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
 			this.tilesetViewerToolStripMenuItem.Text = "&Tileset Viewer...";
 			this.tilesetViewerToolStripMenuItem.Click += new System.EventHandler(this.tilesetViewerToolStripMenuItem_Click);
 			// 
@@ -183,6 +193,13 @@
 			this.showGridOverlayToolStripMenuItem.Name = "showGridOverlayToolStripMenuItem";
 			this.showGridOverlayToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
 			this.showGridOverlayToolStripMenuItem.Text = "Show &Grid Overlay";
+			// 
+			// showDebugWarpsToolStripMenuItem
+			// 
+			this.showDebugWarpsToolStripMenuItem.CheckOnClick = true;
+			this.showDebugWarpsToolStripMenuItem.Name = "showDebugWarpsToolStripMenuItem";
+			this.showDebugWarpsToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.showDebugWarpsToolStripMenuItem.Text = "Show &Debug Warps";
 			// 
 			// useNighttimePalettesToolStripMenuItem
 			// 
@@ -227,7 +244,7 @@
 			this.statusStrip.Location = new System.Drawing.Point(0, 625);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(1134, 22);
-			this.statusStrip.TabIndex = 7;
+			this.statusStrip.TabIndex = 4;
 			this.statusStrip.Text = "statusStrip1";
 			// 
 			// tsslStatus
@@ -273,7 +290,7 @@
 			this.spnlMap.Location = new System.Drawing.Point(182, 27);
 			this.spnlMap.Name = "spnlMap";
 			this.spnlMap.Size = new System.Drawing.Size(659, 595);
-			this.spnlMap.TabIndex = 5;
+			this.spnlMap.TabIndex = 2;
 			this.spnlMap.TabStop = true;
 			// 
 			// pbMap
@@ -303,7 +320,7 @@
 			this.spnlBlocks.Location = new System.Drawing.Point(847, 27);
 			this.spnlBlocks.Name = "spnlBlocks";
 			this.spnlBlocks.Size = new System.Drawing.Size(275, 595);
-			this.spnlBlocks.TabIndex = 2;
+			this.spnlBlocks.TabIndex = 3;
 			this.spnlBlocks.TabStop = true;
 			// 
 			// pbBlocks
@@ -316,13 +333,6 @@
 			this.pbBlocks.TabIndex = 0;
 			this.pbBlocks.TabStop = false;
 			this.pbBlocks.Paint += new System.Windows.Forms.PaintEventHandler(this.pbBlocks_Paint);
-			// 
-			// showDebugWarpsToolStripMenuItem
-			// 
-			this.showDebugWarpsToolStripMenuItem.CheckOnClick = true;
-			this.showDebugWarpsToolStripMenuItem.Name = "showDebugWarpsToolStripMenuItem";
-			this.showDebugWarpsToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-			this.showDebugWarpsToolStripMenuItem.Text = "Show &Debug Warps";
 			// 
 			// MainForm
 			// 
@@ -383,6 +393,7 @@
 		private System.Windows.Forms.ToolStripMenuItem tilesetViewerToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showGridOverlayToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showDebugWarpsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mapInformationToolStripMenuItem;
 	}
 }
 

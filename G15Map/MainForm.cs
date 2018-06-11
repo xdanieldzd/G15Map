@@ -98,11 +98,13 @@ namespace G15Map
 				var mapBitmap = gameDrawing.GetMapBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked);
 				pbMap.ClientSize = new Size(mapBitmap.Width * zoom, mapBitmap.Height * zoom);
 
-				var blockBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap.Tileset, selectedMap.Location, selectedMap.Type, blocksWidth);
+				var blockBitmap = gameDrawing.GetTilesetBlocksBitmap(selectedMap, useNighttimePalettesToolStripMenuItem.Checked, selectedMap.Type, blocksWidth);
 				pbBlocks.ClientSize = new Size(blockBitmap.Width * 2, blockBitmap.Height * 2);
 
 				spnlBlocks.VerticalScroll.SmallChange = 64;
 				spnlBlocks.VerticalScroll.LargeChange = 512;
+
+				mapInformationToolStripMenuItem.Enabled = true;
 
 				spnlMap.Refresh();
 				spnlBlocks.Refresh();
@@ -429,6 +431,32 @@ namespace G15Map
 					}
 				}
 			}
+		}
+
+		private void mapInformationToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show(
+				$"Map {selectedMap.ParentGroup + 1:D2}:{Array.IndexOf(gameHandler.Maps[selectedMap.ParentGroup], selectedMap) + 1:D2} - Offset 0x{selectedMap.RomOffset:X6}:\n" +
+				"\n" +
+				$"ROM Bank: 0x{selectedMap.RomBank:X2}; Tileset number: {selectedMap.Tileset:D2}\n" +
+				$"Map type: {selectedMap.Type:D2}; Town map location: {selectedMap.TownMapLocation:D2}\n" +
+				$"Unknown 1?: {selectedMap.Unknown1:D2}; Unknown 2?: {selectedMap.Unknown2:D2}\n" +
+				$"Header pointer: 0x{selectedMap.HeaderPointer:X4} (0x{GameHelpers.CalculateOffset(selectedMap.RomBank, selectedMap.HeaderPointer):X6})\n" +
+				"\n" +
+				"Primary header:\n" +
+				$"- Dimensions: {selectedMap.PrimaryHeader.Width} * {selectedMap.PrimaryHeader.Height} blocks\n" +
+				$"- Map data pointer: 0x{selectedMap.PrimaryHeader.MapDataPointer:X4} (0x{GameHelpers.CalculateOffset(selectedMap.RomBank, selectedMap.PrimaryHeader.MapDataPointer):X6})\n" +
+				$"- Some important pointer?: 0x{selectedMap.PrimaryHeader.SomeImportantPointer:X4} (0x{GameHelpers.CalculateOffset(selectedMap.RomBank, selectedMap.PrimaryHeader.SomeImportantPointer):X6}?)\n" +
+				$"- Maybe script pointer?: 0x{selectedMap.PrimaryHeader.MaybeScriptPointer:X4} (0x{GameHelpers.CalculateOffset(selectedMap.RomBank, selectedMap.PrimaryHeader.MaybeScriptPointer):X6}?)\n" +
+				$"- Secondary header pointer: 0x{selectedMap.PrimaryHeader.SecondaryHeaderPointer:X4} (0x{GameHelpers.CalculateOffset(selectedMap.RomBank, selectedMap.PrimaryHeader.SecondaryHeaderPointer):X6})\n" +
+				$"- Connections to: {selectedMap.PrimaryHeader.ConnectionDirections}\n" +
+				$"\n" +
+				$"Secondary header:\n" +
+				$"- Some pointer backwards?: 0x{selectedMap.SecondaryHeader.SomePointerBackwards:X4} (0x{GameHelpers.CalculateOffset(selectedMap.RomBank, selectedMap.SecondaryHeader.SomePointerBackwards):X6}?)\n" +
+				$"- Number of warps: {selectedMap.SecondaryHeader.NumWarps:D2}\n" +
+				$"- Number of signs: {selectedMap.SecondaryHeader.NumSigns:D2}\n" +
+				$"- Number of NPCs: {selectedMap.SecondaryHeader.NumNPCs:D2}\n",
+				"Map Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }
